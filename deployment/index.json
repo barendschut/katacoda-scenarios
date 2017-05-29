@@ -1,8 +1,6 @@
 {
   "title": "Docker Training Part II: Deployments",
   "description": "Deployment Exercise",
-  "difficulty": "beginner",
-  "time": "15 minutes",
   "details": {
     "steps": [
       {"title":"Exercise Playground","text":"exercise1.md"},
