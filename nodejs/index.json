@@ -37,6 +37,20 @@
         "file": "Dockerfile",
         "target": "~/"
       }
+    ],
+    "host01": [
+      {
+        "file": "package.json",
+        "target": "~/"
+      },
+      {
+        "file": "server.js",
+        "target": "~/"
+      },
+      {
+        "file": "Dockerfile",
+        "target": "~/"
+      }
     ]
   },
   "backend": {
