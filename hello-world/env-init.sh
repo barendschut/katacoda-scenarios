@@ -204,6 +204,4 @@ echo 'kubectl -s http://host01:8080 create -f ~/dashboard.yaml' >> ~/.bin/launch
 echo 'kubectl -s http://host01:8080 cluster-info' >> ~/.bin/launch.sh
 chmod +x ~/.bin/launch.sh
 
-
-docker pull gcr.io/google_containers/etcd:2.2.1
-docker pull gcr.io/google_containers/hyperkube:v1.2.2
+~/.bin/launch.sh
