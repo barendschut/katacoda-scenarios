@@ -4,7 +4,9 @@
   "difficulty": "beginner",
   "time": "15 minutes",
   "details": {
-    "steps": [],
+    "steps": [
+      {"title":"Exercise Playground","text":"\n"}
+    ],
     "intro": {
       "courseData": "env-init.sh",
       "code": "code.sh",
