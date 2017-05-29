@@ -1,5 +1,5 @@
 {
-  "title": "Hello World Scenario",
+  "title": "Hello World Scenario 1",
   "description": "Your First Scenario 1",
   "difficulty": "beginner",
   "time": "2 minutes",
@@ -20,9 +20,11 @@
   },
   "environment": {
     "uilayout": "editor-terminal",
-    "uimessage1": "\u001b[32mYour Interactive Bash Terminal.\r\nStart Kubernetes using `launch.sh`\u001b[m\r\n"
+    "uimessage1": "\u001b[32mYour Interactive Bash Terminal.\r\nStart Kubernetes using `launch.sh`\u001b[m\r\n",
+    "courseDataFilename":"env-init.sh"
   },
   "backend": {
-    "imageid": "docker"
+    "imageid": "docker",
+    "courseDataFilename":"env-init.sh"
   }
 }
