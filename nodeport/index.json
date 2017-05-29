@@ -16,6 +16,7 @@
     }
   },  
   "environment": {
+    "hidefinish": true,
     "showdashboard":true,
     "dashboards": [{"name": "Dashboard", "port": 8080}],
     "uilayout":"editor-terminal-v1",
