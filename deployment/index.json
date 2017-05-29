@@ -1,11 +1,13 @@
 {
-  "title": "Docker Training Part II",
+  "title": "Docker Training Part II: Deployments",
   "description": "Deployment Exercise",
   "difficulty": "beginner",
   "time": "15 minutes",
   "details": {
     "steps": [
-      {"title":"Exercise Playground","text":"exercise.md"}
+      {"title":"Exercise Playground","text":"exercise1.md"},
+      {"title":"Exercise Playground","text":"exercise2.md"},
+      {"title":"Exercise Playground","text":"exercise3.md"}
     ],
     "intro": {
       "courseData": "env-init.sh",
