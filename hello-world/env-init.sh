@@ -2,7 +2,6 @@ alias ssh="ssh -oBatchMode=yes -o TCPKeepAlive=yes -o ServerAliveInterval=30 -o 
 alias scp="scp -oBatchMode=yes -o TCPKeepAlive=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=30 -o ConnectTimeout=30 -o ConnectionAttempts=30 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=error"
 alias ssh="ssh -oBatchMode=yes -o TCPKeepAlive=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=30 -o ConnectTimeout=30 -o ConnectionAttempts=30 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=error"
 alias scp="scp -oBatchMode=yes -o TCPKeepAlive=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=30 -o ConnectTimeout=30 -o ConnectionAttempts=30 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=error"
-git clone https://github.com/katacoda/kubernetes-guestbook.git .
 
 echo 'apiVersion: v1' >> ~/skydns-rc.yaml
 echo 'kind: ReplicationController' >> ~/skydns-rc.yaml
@@ -206,13 +205,5 @@ echo 'kubectl -s http://host01:8080 cluster-info' >> ~/.bin/launch.sh
 chmod +x ~/.bin/launch.sh
 
 
-
-echo 'kubectl create -f redis-master-controller.yaml' >> ~/.bin/start.sh
-echo 'kubectl create -f redis-master-service.yaml' >> ~/.bin/start.sh
-echo 'kubectl create -f redis-slave-controller.yaml' >> ~/.bin/start.sh
-echo 'kubectl create -f redis-slave-service.yaml' >> ~/.bin/start.sh
-echo 'kubectl create -f frontend-controller.yaml' >> ~/.bin/start.sh
-echo 'kubectl create -f frontend-service.yaml' >> ~/.bin/start.sh
-chmod +x ~/.bin/start.sh
-
-docker pull redis:alpine
+docker pull gcr.io/google_containers/etcd:2.2.1
+docker pull gcr.io/google_containers/hyperkube:v1.2.2
