@@ -1,6 +1,6 @@
 {
-  "title": "Docker Training Part II: NodePort Services",
-  "description": "NodePort Services Exercise",
+  "title": "Docker Training Part II: Node.js App",
+  "description": "Node.js App Exercise",
   "details": {
     "steps": [
       {"title":"Exercise Playground","text":"exercise.md"}
