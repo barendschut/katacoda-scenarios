@@ -4,6 +4,7 @@
   "difficulty": "beginner",
   "time": "2 minutes",
   "courseDataFilename":"env-init.sh",
+  "files":["App_TEST"],
   "details": {
     "steps": [],
     "courseDataFilename":"env-init.sh",
