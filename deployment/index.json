@@ -5,7 +5,7 @@
   "time": "15 minutes",
   "details": {
     "steps": [
-      {"title":"Exercise Playground","text":"finish.md"}
+      {"title":"Exercise Playground","text":"exercise.md"}
     ],
     "intro": {
       "courseData": "env-init.sh",
