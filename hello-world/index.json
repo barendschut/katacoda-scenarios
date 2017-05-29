@@ -1,13 +1,13 @@
 {
-  "title": "Hello World Scenario 1",
-  "description": "Your First Scenario 1",
+  "title": "Docker Training Part II",
+  "description": "Description goes here",
   "difficulty": "beginner",
-  "time": "2 minutes",
-  "files":["App_TEST"],
+  "time": "15 minutes",
   "details": {
     "steps": [],
     "intro": {
       "courseData": "env-init.sh",
+      "code": "code.sh",
       "text": "intro.md",
       "credits": ""
     },
@@ -17,7 +17,7 @@
   },
   "environment": {
     "uilayout": "editor-terminal",
-    "uimessage1": "\u001b[32mYour Interactive Bash Terminal.\r\nStart Kubernetes using `launch.sh`\u001b[m\r\n"
+    "uimessage1": "\u001b[32mWelcome to Docker Training Part II @ adidas.\r\n\u001b[m\r\n"
   },
   "backend": {
     "imageid": "docker"
