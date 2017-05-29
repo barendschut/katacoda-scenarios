@@ -1,8 +1,9 @@
 {
   "title": "Hello World Scenario",
-  "description": "Your First Scenario",
+  "description": "Your First Scenario 1",
   "difficulty": "beginner",
   "time": "2 minutes",
+  "courseDataFilename":"env-init.sh",
   "details": {
     "steps": [{
       "title": "Step 1 - Run Command",
