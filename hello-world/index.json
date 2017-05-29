@@ -3,14 +3,11 @@
   "description": "Your First Scenario 1",
   "difficulty": "beginner",
   "time": "2 minutes",
-  "courseDataFilename":"env-init.sh",
   "files":["App_TEST"],
   "details": {
     "steps": [],
-    "courseDataFilename":"env-init.sh",
     "intro": {
-      "courseData": {
-       },
+      "courseData": "env-init.sh",
       "text": "intro.md",
       "credits": ""
     },
@@ -20,11 +17,9 @@
   },
   "environment": {
     "uilayout": "editor-terminal",
-    "uimessage1": "\u001b[32mYour Interactive Bash Terminal.\r\nStart Kubernetes using `launch.sh`\u001b[m\r\n",
-    "courseDataFilename":"env-init.sh"
+    "uimessage1": "\u001b[32mYour Interactive Bash Terminal.\r\nStart Kubernetes using `launch.sh`\u001b[m\r\n"
   },
   "backend": {
-    "imageid": "docker",
-    "courseDataFilename":"env-init.sh"
+    "imageid": "docker"
   }
 }
