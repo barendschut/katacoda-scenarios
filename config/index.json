@@ -3,7 +3,7 @@
   "description": "Configuration Exercise",
   "details": {
     "steps": [
-      {"title":"Exercise Playground","text":"exercise.md"}
+      {"title":"Exercise Playground","text":"exercise.md","verify": "verify.sh"}
     ],
     "intro": {
       "courseData": "env-init.sh",

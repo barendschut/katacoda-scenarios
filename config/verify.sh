@@ -1,0 +1,1 @@
+[ `curl -s -o /dev/null -w "%{http_code}" host01:30080` -eq "401" ] && echo "done"
