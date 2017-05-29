@@ -9,7 +9,7 @@
     "steps": [],
     "courseDataFilename":"env-init.sh",
     "intro": {
-      "courseData": "touch MAYBE_THIS\n",
+      "courseData": "",
       "text": "intro.md",
       "credits": ""
     },
