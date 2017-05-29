@@ -4,6 +4,7 @@
   "details": {
     "steps": [
       {"title":"Exercise Playground","text":"exercise.md","verify": "verify.sh", "answer": "exercise.md"}
+      {"title":"Exercise Playground","text":"exercise.md","verify": "verify.sh", "answer": "exercise.md"}
     ],
     "intro": {
       "courseData": "env-init.sh",
