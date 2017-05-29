@@ -1,8 +1,6 @@
 {
-  "title": "Docker Training Part II: NodePort Services",
-  "description": "NodePort Services Exercise",
-  "difficulty": "beginner",
-  "time": "15 minutes",
+  "title": "Docker Training Part II: Configuration",
+  "description": "Configuration Exercise",
   "details": {
     "steps": [
       {"title":"Exercise Playground","text":"exercise.md"}
