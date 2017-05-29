@@ -10,7 +10,8 @@
     }],
     "intro": {
       "text": "intro.md",
-      "credits": ""
+      "credits": "",
+      "courseDataFilename":"env-init.sh"
     },
     "finish": {
       "text": "finish.md"
