@@ -24,7 +24,7 @@
     "uimessage1": "\u001b[32mWelcome to Docker Training Part II @ adidas.\r\n\u001b[m\r\n"
   },
   "assets": {
-    "client": [
+    "host01": [
       {
         "file": "package.json",
         "target": "~/"
