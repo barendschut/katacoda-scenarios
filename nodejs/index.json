@@ -27,29 +27,15 @@
     "client": [
       {
         "file": "package.json",
-        "target": "~/"
+        "target": "/home/scrapbook/tutorial/"
       },
       {
         "file": "server.js",
-        "target": "~/"
+        "target": "/home/scrapbook/tutorial/"
       },
       {
         "file": "Dockerfile",
-        "target": "~/"
-      }
-    ],
-    "host01": [
-      {
-        "file": "package.json",
-        "target": "~/"
-      },
-      {
-        "file": "server.js",
-        "target": "~/"
-      },
-      {
-        "file": "Dockerfile",
-        "target": "~/"
+        "target": "/home/scrapbook/tutorial/"
       }
     ]
   },
