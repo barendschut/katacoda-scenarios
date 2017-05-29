@@ -3,11 +3,9 @@
   "description": "Configuration Exercise",
   "details": {
     "steps": [
-      {"title":"Exercise Playground","text":"exercise.md","verify": "verify.sh"}
+      {"title":"Exercise Playground","text":"exercise.md","verify": "verify.sh","courseData": "env-init.sh","code": "code.sh"}
     ],
     "intro": {
-      "courseData": "env-init.sh",
-      "code": "code.sh",
       "text": "intro.md",
       "credits": ""
     },
@@ -17,6 +15,7 @@
   },  
   "environment": {
     "hideintro": true,
+    "hidefinish": true,
     "showdashboard":true,
     "dashboard":"Dashboard",
     "uilayout":"editor-terminal-v1",
