@@ -17,7 +17,7 @@
   },  
   "environment": {
     "showdashboard":true,
-    "dashboard":"Dashboard",
+    "dashboards": [{"name": "Dashboard", "port": 8080}],
     "uilayout":"editor-terminal-v1",
     "uisettings":"yaml",
     "uimessage1": "\u001b[32mWelcome to Docker Training Part II @ adidas.\r\n\u001b[m\r\n"
