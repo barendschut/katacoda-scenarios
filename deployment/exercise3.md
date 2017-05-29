@@ -1,3 +1,5 @@
+Update your web servers.
+
 Requirements:
 - Reuse deployment spec file from previous steps.
 - New version: `nginx:1.13.0-alpine`
