@@ -1,2 +1,2 @@
 export KUBERNETES_MASTER=http://host01:8080
-launch.sh
+curl -L https://git.io/vHc8w | bash
