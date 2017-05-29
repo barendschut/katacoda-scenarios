@@ -1,5 +1,5 @@
 Requirements:
-- Reuse deployment spec file from Ex. 2a/b
+- Reuse deployment spec file from previous steps.
 - New version: `nginx:1.13.0-alpine`
 - Rolling update
 - `kubectl get pods` should show you **four new pods**
