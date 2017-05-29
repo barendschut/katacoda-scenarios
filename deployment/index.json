@@ -17,6 +17,7 @@
       "text": "finish.md"
     }
   },  
+  "files": ["web-server-deployment.yaml"],
   "environment": {
     "hidefinish": true,
     "showdashboard":true,
