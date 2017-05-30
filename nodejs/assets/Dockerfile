@@ -3,7 +3,7 @@ RUN mkdir /src/
 COPY package.json /src/
 WORKDIR /src/
 RUN npm install --production
-COPY src/ /src/
+COPY server.js /src/
 EXPOSE 3000
 ENV NODE_ENV production
 ENTRYPOINT ["node", "server.js"]
