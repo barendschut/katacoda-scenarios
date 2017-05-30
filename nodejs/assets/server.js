@@ -5,4 +5,5 @@ http.createServer(function(request, response) {
     response.write(JSON.stringify({
         HOSTNAME: process.env.HOSTNAME
     }, null, 2), "UTF-8")
+    response.end()
 }).listen(3000)
