@@ -9,6 +9,7 @@ http.createServer(function(request, response) {
     var callback = function(innerResponse) {
         var chunks = [];
         innerResponse.on('data', function(chunk) {
+            console.log(chunk)
             chunks.push(chunk);
         });
         innerResponse.on('end', function() {
