@@ -6,17 +6,17 @@ http.createServer(function(request, response) {
         host: "get-hostname",
         path: "/"
     };
-    callback = function(innerResponse) {
+    var callback = function(innerResponse) {
         var chunks = [];
         innerResponse.on('data', function(chunk) {
-            chunks.push(chunk)
+            chunks.push(chunk);
         });
         innerResponse.on('end', function() {
-            var jsonData = chunks.join('')
-            var data = JSON.parse(jsonData)
-            response.write(`Got a response from ${data.HOSTNAME}!`)
+            var jsonData = chunks.join('');
+            var data = JSON.parse(jsonData);
+            response.write(`Got a response from ${data.HOSTNAME}!`);
+            response.end();
         });
-    }
-    var req = http.request(options, callback);
-    req.end()
-}).listen(3000)
+    };
+    http.request(options, callback).end();
+}).listen(3000);
