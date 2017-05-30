@@ -1,0 +1,13 @@
+{
+  "name": "node-sample",
+  "description": "sample Node app",
+  "repository": {},
+  "license": "MIT",
+  "version": "1.0.0",
+  "main": "server.js",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "eslint": "^3.10.2"
+  }
+}
