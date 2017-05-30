@@ -1,11 +1,11 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: my-app
+  name: get-hostname
 spec:
   type: NodePort
   selector:
-    app: my-app
+    app: get-hostname
   ports:
     - protocol: TCP
       port: 3000
