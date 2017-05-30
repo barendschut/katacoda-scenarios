@@ -1,12 +1,16 @@
-Run a load-balanced web server in a cluster.
+Run two services that communicate with each other.
 
 Requirements:
 
-- There should be **five replicas** of your web server
-- `curl host01:30080` should output “Hello Kubernetes!”
+- The first service (named `get-hostname`) returns the HOSTNAME environment variable of the Pod it is running on.
+- The service `get-hostname` should not be available outside the cluster.
+- The second service (named `use-service`) calls `get-hostname`, reads its response, and returns it.
+- There should be at least two replicas of each application.
+- `curl host01:30080` should output the result of calling `use-service`
 
 Hints:
 
-- Create a **Deployment** of your web server
-- Create a **Service of type NodePort** selecting the Deployment’s Pods
-- The (single) **Node** of your cluster is reachable at `host01`
+- You may use either environment variables or DNS entries to reach a service within the cluster
+- The DNS name mapping to a Service's pods is the same as its `metadata.name` value
+- 
+
