@@ -215,3 +215,4 @@ curl -Lo use-service/package.json https://raw.githubusercontent.com/sgreben/kata
 curl -Lo use-service/server.js https://raw.githubusercontent.com/sgreben/katacoda-scenarios/master/nodejs/assets/use-service/server.js
 curl -Lo use-service/deployment.yaml https://raw.githubusercontent.com/sgreben/katacoda-scenarios/master/nodejs/assets/use-service/deployment.yaml
 curl -Lo use-service/service.yaml https://raw.githubusercontent.com/sgreben/katacoda-scenarios/master/nodejs/assets/use-service/service.yaml
+docker pull node:7.10.0-alpine
