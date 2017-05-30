@@ -205,3 +205,5 @@ chmod +x ~/.bin/launch.sh
 curl -Lo Dockerfile https://raw.githubusercontent.com/sgreben/katacoda-scenarios/master/nodejs/assets/Dockerfile
 curl -Lo package.json https://raw.githubusercontent.com/sgreben/katacoda-scenarios/master/nodejs/assets/package.json
 curl -Lo server.js https://raw.githubusercontent.com/sgreben/katacoda-scenarios/master/nodejs/assets/server.js
+curl -Lo deployment.yaml https://raw.githubusercontent.com/sgreben/katacoda-scenarios/master/nodejs/assets/deployment.yaml
+curl -Lo service.yaml https://raw.githubusercontent.com/sgreben/katacoda-scenarios/master/nodejs/assets/service.yaml
