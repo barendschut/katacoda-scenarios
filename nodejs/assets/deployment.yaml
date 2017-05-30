@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: my-app
 spec:
-  replicas: 4
+  replicas: 2
   template: 
     metadata:
       labels:
@@ -15,4 +15,3 @@ spec:
         imagePullPolicy: Never
         ports:
         - containerPort: 3000
-        
