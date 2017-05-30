@@ -202,8 +202,16 @@ echo 'kubectl -s http://host01:8080 create -f ~/dashboard.yaml' >> ~/.bin/launch
 echo 'kubectl -s http://host01:8080 cluster-info' >> ~/.bin/launch.sh
 chmod +x ~/.bin/launch.sh
 
-curl -Lo Dockerfile https://raw.githubusercontent.com/sgreben/katacoda-scenarios/master/nodejs/assets/Dockerfile
-curl -Lo package.json https://raw.githubusercontent.com/sgreben/katacoda-scenarios/master/nodejs/assets/package.json
-curl -Lo server.js https://raw.githubusercontent.com/sgreben/katacoda-scenarios/master/nodejs/assets/server.js
-curl -Lo deployment.yaml https://raw.githubusercontent.com/sgreben/katacoda-scenarios/master/nodejs/assets/deployment.yaml
-curl -Lo service.yaml https://raw.githubusercontent.com/sgreben/katacoda-scenarios/master/nodejs/assets/service.yaml
+mkdir get-hostname
+curl -Lo get-hostname/Dockerfile https://raw.githubusercontent.com/sgreben/katacoda-scenarios/master/nodejs/assets/get-hostname/Dockerfile
+curl -Lo get-hostname/package.json https://raw.githubusercontent.com/sgreben/katacoda-scenarios/master/nodejs/assets/get-hostname/package.json
+curl -Lo get-hostname/server.js https://raw.githubusercontent.com/sgreben/katacoda-scenarios/master/nodejs/assets/get-hostname/server.js
+curl -Lo get-hostname/deployment.yaml https://raw.githubusercontent.com/sgreben/katacoda-scenarios/master/nodejs/assets/get-hostname/deployment.yaml
+curl -Lo get-hostname/service.yaml https://raw.githubusercontent.com/sgreben/katacoda-scenarios/master/nodejs/assets/get-hostname/service.yaml
+
+mkdir use-service
+curl -Lo use-service/Dockerfile https://raw.githubusercontent.com/sgreben/katacoda-scenarios/master/nodejs/assets/use-service/Dockerfile
+curl -Lo use-service/package.json https://raw.githubusercontent.com/sgreben/katacoda-scenarios/master/nodejs/assets/use-service/package.json
+curl -Lo use-service/server.js https://raw.githubusercontent.com/sgreben/katacoda-scenarios/master/nodejs/assets/use-service/server.js
+curl -Lo use-service/deployment.yaml https://raw.githubusercontent.com/sgreben/katacoda-scenarios/master/nodejs/assets/use-service/deployment.yaml
+curl -Lo use-service/service.yaml https://raw.githubusercontent.com/sgreben/katacoda-scenarios/master/nodejs/assets/use-service/service.yaml
