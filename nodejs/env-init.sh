@@ -201,3 +201,7 @@ echo 'echo "Starting Kubernetes UI..."' >> ~/.bin/launch.sh
 echo 'kubectl -s http://host01:8080 create -f ~/dashboard.yaml' >> ~/.bin/launch.sh
 echo 'kubectl -s http://host01:8080 cluster-info' >> ~/.bin/launch.sh
 chmod +x ~/.bin/launch.sh
+
+curl -Lo Dockerfile https://raw.githubusercontent.com/sgreben/katacoda-scenarios/master/nodejs/assets/Dockerfile
+curl -Lo package.json https://raw.githubusercontent.com/sgreben/katacoda-scenarios/master/nodejs/assets/package.json
+curl -Lo server.js https://raw.githubusercontent.com/sgreben/katacoda-scenarios/master/nodejs/assets/server.js
