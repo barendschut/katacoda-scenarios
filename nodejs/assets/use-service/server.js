@@ -4,6 +4,7 @@ http.createServer(function(request, response) {
     response.writeHead(200, {'Content-Type': 'application/json'});
     var options = {
         host: "get-hostname",
+        port: 3000,
         path: "/"
     };
     var callback = function(innerResponse) {
