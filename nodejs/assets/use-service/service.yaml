@@ -3,7 +3,7 @@ apiVersion: v1
 metadata:
   name: use-service
 spec:
-  type: NodePort
+  type: <SERVICE TYPE>
   selector:
     app: use-service
   ports:
