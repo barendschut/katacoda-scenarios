@@ -5,7 +5,7 @@ metadata:
 spec:
   type: <SERVICE TYPE>
   selector:
-    app: use-service
+    <LABELS>
   ports:
     - protocol: TCP
       port: <SERVICE PORT>
