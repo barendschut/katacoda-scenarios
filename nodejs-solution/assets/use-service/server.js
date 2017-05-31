@@ -3,8 +3,8 @@ var http = require("http");
 http.createServer(function(request, response) {
     response.writeHead(200, {'Content-Type': 'application/json'});
     var options = {
-        host: <GET-HOSTNAME SERVICE HOST>, // <--- FILL IN THIS LINE
-        port: <GET-HOSTNAME SERVICE PORT>, // <--- FILL IN THIS LINE
+        host: process.env.GET_HOSTNAME_SERVICE_HOST || "get-hostname",
+        port: process.env.GET_HOSTNAME_SERVICE_PORT || 3000,
         path: "/"
     };
     var callback = function(innerResponse) {
@@ -20,4 +20,4 @@ http.createServer(function(request, response) {
         });
     };
     http.request(options, callback).end();
-}).listen(<CONTAINER PORT>); // <--- FILL IN THIS LINE
+}).listen(3000);

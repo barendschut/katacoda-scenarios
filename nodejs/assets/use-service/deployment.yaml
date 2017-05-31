@@ -7,11 +7,11 @@ spec:
   template: 
     metadata:
       labels:
-        app: use-service
+        <LABELS>
     spec:
       containers:
       - name: app
-        image: use-service
+        image: <IMAGE NAME>
         imagePullPolicy: Never
         ports:
-        - containerPort: 3000
+        - containerPort: <CONTAINER PORT>

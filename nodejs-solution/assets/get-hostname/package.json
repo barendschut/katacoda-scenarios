@@ -5,6 +5,9 @@
   "license": "MIT",
   "version": "1.0.0",
   "main": "server.js",
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+  },
+  "devDependencies": {
+    "eslint": "^3.10.2"
+  }
 }

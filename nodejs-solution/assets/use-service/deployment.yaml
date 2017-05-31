@@ -1,17 +1,17 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: get-hostname
+  name: use-service
 spec:
-  replicas: <NUMBER OF REPLICAS>
+  replicas: 2
   template: 
     metadata:
       labels:
-        app: get-hostname
+        app: use-service
     spec:
       containers:
       - name: app
-        image: <IMAGE NAME>
+        image: use-service
         imagePullPolicy: Never
         ports:
-        - containerPort: <CONTAINER PORT>
+        - containerPort: 3000

@@ -4,6 +4,6 @@ COPY package.json /src/
 WORKDIR /src/
 RUN npm install --production
 COPY server.js /src/
-EXPOSE <CONTAINER PORT>      # <--- FILL IN THIS LINE
+EXPOSE 3000
 ENV NODE_ENV production
 ENTRYPOINT ["node", "server.js"]

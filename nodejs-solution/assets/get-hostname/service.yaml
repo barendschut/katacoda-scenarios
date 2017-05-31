@@ -5,8 +5,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-      <LABELS>
+    app: get-hostname
   ports:
     - protocol: TCP
-      port: <SERVICE PORT>
-      targetPort: <CONTAINER PORT> # can be left out if targetPort = port
+      port: 3000

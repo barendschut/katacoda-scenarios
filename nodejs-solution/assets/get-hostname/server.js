@@ -6,4 +6,4 @@ http.createServer(function(request, response) {
         HOSTNAME: process.env.HOSTNAME
     }, null, 2));
     response.end();
-}).listen(<CONTAINER PORT>); // <--- FILL IN THIS LINE
+}).listen(3000);

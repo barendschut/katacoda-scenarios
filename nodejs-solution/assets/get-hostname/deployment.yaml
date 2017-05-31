@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: get-hostname
 spec:
-  replicas: <NUMBER OF REPLICAS>
+  replicas: 2
   template: 
     metadata:
       labels:
@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: <IMAGE NAME>
+        image: get-hostname
         imagePullPolicy: Never
         ports:
-        - containerPort: <CONTAINER PORT>
+        - containerPort: 3000
