@@ -3,8 +3,8 @@ var http = require("http");
 http.createServer(function(request, response) {
     response.writeHead(200, {'Content-Type': 'application/json'});
     var options = {
-        host: "get-hostname",
-        port: process.env.GET_HOSTNAME_SERVICE_PORT,
+        host: process.env.GET_HOSTNAME_SERVICE_HOST || "get-hostname",
+        port: process.env.GET_HOSTNAME_SERVICE_PORT || 3000,
         path: "/"
     };
     var callback = function(innerResponse) {
