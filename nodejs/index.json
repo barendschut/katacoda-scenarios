@@ -9,7 +9,7 @@
       "courseData": "env-init.sh",
       "code": "code.sh",
       "text": "intro.md",
-      "credits": ""
+      "credits":  ""
     },
     "finish": {
       "text": "finish.md"
