@@ -18,7 +18,7 @@
   "environment": {
     "hidefinish": true,
     "showdashboard":false,
-    "uilayout":"editor-terminal-v1",
+    "uilayout":"editor-terminal",
     "uisettings":"yaml",
     "uimessage1": "\u001b[32mWelcome to Docker Training Part II @ adidas.\r\n\u001b[m\r\n"
   },
