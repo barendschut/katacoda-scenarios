@@ -1,3 +1,3 @@
 #!/bin/sh
 
-echo Intro script
+touch ABC_DEF_XYZ
