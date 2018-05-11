@@ -18,6 +18,9 @@
         "text": "step3.md"
       }
     ],
+    "intro": {
+      "courseData": "step1_setup.sh"
+    },
     "assets": {
       "client": [
         {
@@ -34,7 +37,8 @@
   "environment": {
     "hideintro": true,
     "hidefinish": true,
-    "uilayout": "editor-terminal"
+    "uilayout": "editor-terminal",
+    "uimessage1": ""
   },
   "backend": {
     "imageid": "docker"
