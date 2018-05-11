@@ -34,6 +34,6 @@
     "uimessage1": ""
   },
   "backend": {
-    "imageid": "docker"
+    "imageid": "kubernetes"
   }
 }
