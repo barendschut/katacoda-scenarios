@@ -11,7 +11,8 @@
     ],
     "intro": {
       "text": "intro.md",
-      "code": "intro_demo.sh"
+      "code": "intro_demo.sh",
+      "courseData": "intro_setup.sh"
     },
     "assets": {
       "client": [
