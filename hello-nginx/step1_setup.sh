@@ -1,3 +1,3 @@
 #!/bin/sh
 
-touch ~/SETUP_2_MADE_THIS
+touch /STEP1_SETUP_MADE_THIS

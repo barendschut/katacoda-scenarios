@@ -1,3 +1,3 @@
 #!/bin/sh
 
-touch ~/SETUP_MADE_THIS
+touch /INTRO_SETUP_MADE_THIS

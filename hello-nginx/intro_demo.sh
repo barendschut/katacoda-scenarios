@@ -1,3 +1,3 @@
 #!/bin/sh
 
-touch ~/DEMO_MADE_THIS
+touch /INTRO_DEMO_MADE_THIS
