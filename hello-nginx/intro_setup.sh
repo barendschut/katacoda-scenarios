@@ -1,3 +1,3 @@
 #!/bin/sh
 
-touch ~/ABC_DEF_XYZ
+touch ~/SETUP_MADE_THIS
