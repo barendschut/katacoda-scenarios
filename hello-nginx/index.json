@@ -6,8 +6,7 @@
       {
         "title": "Step 1",
         "text": "step1.md",
-        "code": "step1_demo.sh",
-        "courseData": "courseBase.sh"
+        "code": "step1_demo.sh"
       },
       {
         "title": "Step 2",
@@ -19,7 +18,7 @@
       }
     ],
     "intro": {
-      "courseData": "courseBase.sh"
+      "code": "courseBase.sh"
     },
     "assets": {
       "client": [
