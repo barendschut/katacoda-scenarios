@@ -28,5 +28,17 @@
   },
   "backend": {
     "imageid": "docker"
+  },
+  "assets": {
+    "client": [
+      {
+        "file": "Dockerfile",
+        "target": "~/"
+      },
+      {
+        "file": "index.html",
+        "target": "~/"
+      }
+    ]
   }
 }
