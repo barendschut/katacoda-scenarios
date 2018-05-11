@@ -31,7 +31,8 @@
     "hideintro": false,
     "hidefinish": true,
     "uilayout": "editor-terminal",
-    "uimessage": "false"
+    "uimessage": "XY",
+    "uimessage1": "XY"
   },
   "backend": {
     "imageid": "docker"
