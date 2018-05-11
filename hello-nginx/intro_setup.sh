@@ -1,3 +1,1 @@
-#!/bin/sh
-
-touch /INTRO_SETUP_MADE_THIS
+touch /home/scrapbook/tutorial/INTRO_SETUP_MADE_THIS
