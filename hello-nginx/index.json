@@ -31,9 +31,7 @@
     "hideintro": false,
     "hidefinish": true,
     "uilayout": "editor-terminal",
-    "uimessage1": "Abc Def",
-    "uimessage2": "A000bc D111ef",
-    "uimessage": "Xyz Def"
+    "uimessage2": "A000bc D111ef"
   },
   "backend": {
     "imageid": "docker"
