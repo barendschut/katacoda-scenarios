@@ -1,3 +1,3 @@
 #!/bin/sh
 
-touch /INTRO_DEMO_MADE_THIS
+touch /home/scrapbook/tutorial/INTRO_DEMO_MADE_THIS

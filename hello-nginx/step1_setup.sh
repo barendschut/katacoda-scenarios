@@ -1,3 +1,3 @@
 #!/bin/sh
 
-touch /STEP1_SETUP_MADE_THIS
+touch /home/scrapbook/tutorial/STEP1_SETUP_MADE_THIS
