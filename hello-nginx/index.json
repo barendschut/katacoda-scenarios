@@ -30,7 +30,7 @@
   "environment": {
     "hideintro": false,
     "hidefinish": true,
-    "uilayout": "terminal",
+    "uilayout": "editor-terminal",
     "uimessage1": ""
   },
   "backend": {
