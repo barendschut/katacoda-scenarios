@@ -18,7 +18,7 @@
       }
     ],
     "intro": {
-      "code": "courseBase.sh"
+      "code": "intro_demo.sh"
     },
     "assets": {
       "client": [
