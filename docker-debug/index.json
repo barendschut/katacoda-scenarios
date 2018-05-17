@@ -19,6 +19,10 @@
           "target": "~/"
         },
         {
+          "file": "index.html",
+          "target": "~/"
+        },
+        {
           "file": "Dockerfile",
           "target": "~/"
         },
