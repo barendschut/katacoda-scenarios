@@ -31,7 +31,7 @@
     "showdashboard": true,
     "dashboards": [
       { 
-        "name": "Port 8080", 
+        "name": "docker:8080", 
         "port": 8080, 
         "host": "docker" 
       }
