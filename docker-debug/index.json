@@ -16,15 +16,15 @@
       "client": [
         {
           "file": "nginx.conf",
-          "target": "~/nginx.conf"
+          "target": "~/"
         },
         {
           "file": "Dockerfile",
-          "target": "~/Dockerfile"
+          "target": "~/"
         },
         {
           "file": "build_and_run.sh",
-          "target": "~/build_and_run.sh"
+          "target": "~/"
         }
       ]
     }
