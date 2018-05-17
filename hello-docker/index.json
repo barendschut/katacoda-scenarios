@@ -24,11 +24,15 @@
       ]
     }
   },
-  "dashboards": [{ "name": "Port 8080", "port": 8080, "host": "host01" }],
   "environment": {
     "hideintro": false,
     "hidefinish": true,
-    "uilayout": "editor-terminal"
+    "uilayout": "editor-terminal",
+    "dashboards": [{ 
+      "name": "Port 8080", 
+      "port": 8080, 
+      "host": "host01" 
+    }]
   },
   "backend": {
     "imageid": "docker"
