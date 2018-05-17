@@ -30,8 +30,7 @@
   "environment": {
     "hideintro": false,
     "hidefinish": true,
-    "uilayout": "editor-terminal",
-    "uimessage2": "000"
+    "uilayout": "editor-terminal"
   },
   "backend": {
     "imageid": "docker"
