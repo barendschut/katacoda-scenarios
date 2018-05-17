@@ -10,14 +10,25 @@
       }
     ],
     "intro": {
-      "text": "intro.md",
-      "courseData": "intro_setup.sh"
+      "text": "intro.md"
     },
     "assets": {
       "client": [
         {
           "file": "nginx.conf",
           "target": "~/nginx.conf"
+        },
+        {
+          "file": "Dockerfile",
+          "target": "~/Dockerfile"
+        },
+        {
+          "file": ".dockerignore",
+          "target": "~/.dockerignore"
+        },
+        {
+          "file": "build_and_run.sh",
+          "target": "~/build_and_run.sh"
         }
       ]
     }
