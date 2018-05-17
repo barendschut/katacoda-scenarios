@@ -1,3 +1,7 @@
 #!/bin/sh
-chmod +x ./build_and_run.sh
-./build_and_run.sh
+script=./build_and_run.sh
+while [ ! -f "$script" ]; do 
+    sleep 1
+done
+chmod +x "$script"
+"$script"
