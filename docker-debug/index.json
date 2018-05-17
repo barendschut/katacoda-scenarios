@@ -23,7 +23,7 @@
           "target": "~/Dockerfile"
         },
         {
-          "file": ".dockerignore",
+          "file": "_.dockerignore",
           "target": "~/.dockerignore"
         },
         {
