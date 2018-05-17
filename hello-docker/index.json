@@ -28,6 +28,7 @@
     "hideintro": false,
     "hidefinish": true,
     "uilayout": "editor-terminal",
+    "showdashboard": true,
     "dashboards": [
       { 
         "name": "Port 8080", 
