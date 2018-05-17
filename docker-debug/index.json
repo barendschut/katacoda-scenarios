@@ -23,6 +23,10 @@
           "target": "~/"
         },
         {
+          "file": ".dockerignore",
+          "target": "~/"
+        },
+        {
           "file": "build_and_run.sh",
           "target": "~/"
         }
