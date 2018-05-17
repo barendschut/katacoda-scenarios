@@ -5,7 +5,6 @@
     "steps": [
       {
         "title": "",
-        "text": "step1.md",
         "code": "step1_demo.sh"
       }
     ],
