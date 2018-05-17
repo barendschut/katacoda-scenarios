@@ -24,6 +24,7 @@
       ]
     }
   },
+  "dashboards": [{ "name": "Port 8080", "port": 8080, "host": "host01" }],
   "environment": {
     "hideintro": false,
     "hidefinish": true,
