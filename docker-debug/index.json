@@ -23,10 +23,6 @@
           "target": "~/Dockerfile"
         },
         {
-          "file": "_.dockerignore",
-          "target": "~/.dockerignore"
-        },
-        {
           "file": "build_and_run.sh",
           "target": "~/build_and_run.sh"
         }
