@@ -16,8 +16,8 @@
     "assets": {
       "client": [
         {
-          "file": "nginx-config/nginx.conf",
-          "target": "~/nginx-config/nginx.conf"
+          "file": "nginx.conf",
+          "target": "~/nginx.conf"
         }
       ]
     }
