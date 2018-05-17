@@ -1,2 +1,2 @@
 #!/bin/sh
-./start.sh
+./build_and_run.sh
