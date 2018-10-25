@@ -1,0 +1,38 @@
+{
+  "title": "Hello, NGINX",
+  "description": "Short recap of build/run cycle",
+  "details": {
+    "steps": [
+      {
+        "title": "",
+        "text": "step1.md",
+        "code": "step1_demo.sh"
+      }
+    ],
+    "intro": {
+      "text": "intro.md",
+      "code": "intro_demo.sh",
+      "courseData": "intro_setup.sh"
+    },
+    "assets": {
+      "client": [
+        {
+          "file": "Dockerfile",
+          "target": "~/"
+        },
+        {
+          "file": "index.html",
+          "target": "~/"
+        }
+      ]
+    }
+  },
+  "environment": {
+    "hideintro": false,
+    "hidefinish": true,
+    "uilayout": "editor-terminal"
+  },
+  "backend": {
+    "imageid": "kubernetes"
+  }
+}
