@@ -20,12 +20,13 @@
     }
   },
   "environment": {
-    "uilayout": "terminal-v1",
+    "uilayout": "terminal-terminal-v1",
     "hideintro": false,
     "hidefinish": true
   },
   "backend": {
     "port": 8080,
-    "imageid": "kubernetes-cluster-running"
+    "imageid": "kubernetes-cluster-running",
+    "dockerimage":"kubeadm-cluster2-running"
   }
 }
