@@ -16,7 +16,6 @@ NON_REGISTRY_IP=HOST2_IP;
 CERTS_PATH=~/.certs;
 
 main() {
-    getKubeconfigFrom master;
     generateCertsIn "$CERTS_PATH"
     runDockerRegistry "$REGISTRY_IP";
     setUpCertsOn "$CERTS_PATH" master;
