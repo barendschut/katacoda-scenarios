@@ -1,0 +1,31 @@
+{
+  "title": "Kubernetes (with private Docker registry)",
+  "description": "Sandbox",
+  "details": {
+    "steps": [
+      {
+        "title": "Step 1",
+        "text": "step1.md"
+      }
+    ],
+    "intro": {
+      "text": "intro.md",
+      "courseData": "intro_setup"
+    },
+    "finish": {
+      "text": "finish.md"
+    },
+    "assets": {
+      "client": []
+    }
+  },
+  "environment": {
+    "uilayout": "terminal-terminal",
+    "hideintro": false,
+    "hidefinish": true
+  },
+  "backend": {
+    "port": 8080,
+    "imageid": "kubernetes-cluster-running"
+  }
+}

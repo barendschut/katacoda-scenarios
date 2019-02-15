@@ -1,0 +1,73 @@
+set -eu
+alias ssh="ssh -oBatchMode=yes -o TCPKeepAlive=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=30 -o ConnectTimeout=30 -o ConnectionAttempts=30 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=error";
+alias scp="scp -oBatchMode=yes -o TCPKeepAlive=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=30 -o ConnectTimeout=30 -o ConnectionAttempts=30 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=error";
+REGISTRY_DOMAIN=registry.workshop.breda.local;
+
+main() {
+    setUpKubeconfig;
+    setUpSSL;
+    setUpLocalDockerRegistry;
+}
+
+setUpKubeconfig() {
+    scp root@host01:/root/.kube/config ~/.kube/;
+}
+
+setUpSSL() {
+    generateScript | ssh root@host01 "
+        sed 's/HOST_IP/[[HOST_IP]]/g' > /opt/generate.sh;
+        chmod +x /opt/generate.sh;
+        /opt/generate.sh;
+    ";
+}
+
+setUpLocalDockerRegistry() {
+    docker run -d -p 5000:5000 \
+        -v /root/certs:/certs \
+        -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/"$REGISTRY_DOMAIN".crt \
+        -e REGISTRY_HTTP_TLS_KEY=/certs/"$REGISTRY_DOMAIN".key \
+        -v /opt/registry/data:/var/lib/registry \
+        --name registry registry:2;
+}
+
+generateScript() {
+    export REGISTRY_DOMAIN
+    cat <<EOF
+#!/bin/sh
+mkdir certs
+mkdir -p /root/certs
+cd /root/certs
+# Generate a root key
+openssl genrsa -out rootCA.key
+
+# Generate a root certificate
+openssl req -x509 -new -nodes -key rootCA.key -days 365 \
+    -subj "/C=UK/ST=TEST/L=TEST/O=TEST/CN=${REGISTRY_DOMAIN}" \
+    -out rootCA.crt
+
+# Generate key for host
+openssl genrsa -out ${REGISTRY_DOMAIN}.key
+
+# Generate CSR
+openssl req -new -key ${REGISTRY_DOMAIN}.key \
+    -subj "/C=UK/ST=TEST/L=TEST/O=TEST/CN=${REGISTRY_DOMAIN}" \
+    -out ${REGISTRY_DOMAIN}.csr
+
+# Sign certificate request
+openssl x509 -req -in ${REGISTRY_DOMAIN}.csr -CA rootCA.crt -CAkey rootCA.key -CAcreateserial -days 365 -out ${REGISTRY_DOMAIN}.crt
+
+sudo mkdir /usr/local/share/ca-certificates/${REGISTRY_DOMAIN}
+sudo cp rootCA.crt /usr/local/share/ca-certificates/${REGISTRY_DOMAIN}
+sudo update-ca-certificates
+
+mkdir -p /etc/docker/certs.d/${REGISTRY_DOMAIN}
+cp rootCA.crt /etc/docker/certs.d/${REGISTRY_DOMAIN}/ca.crt
+
+# Restart Docker to pick up our certs
+sudo service docker restart
+
+echo 'HOST_IP "${REGISTRY_DOMAIN}"' >> /etc/hosts
+EOF
+}
+
+main;
