@@ -30,6 +30,7 @@
   },
   "backend": {
     "port": 8080,
-    "dockerimage":"istio"
+    "imageid": "kubernetes-cluster-running",
+    "dockerimage":"kubeadm-cluster2-running"
   }
 }
