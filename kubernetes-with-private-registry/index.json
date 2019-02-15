@@ -20,7 +20,7 @@
     }
   },
   "environment": {
-    "uilayout": "terminal-terminal",
+    "uilayout": "terminal-v1",
     "hideintro": false,
     "hidefinish": true
   },
