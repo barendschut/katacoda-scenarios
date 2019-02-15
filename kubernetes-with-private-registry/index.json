@@ -10,13 +10,11 @@
     ],
     "intro": {
       "text": "intro.md",
-      "courseData": "intro_setup.sh"
+      "courseData": "intro_setup.sh",
+      "credits": ""
     },
     "finish": {
       "text": "finish.md"
-    },
-    "assets": {
-      "client": []
     }
   },
   "environment": {
