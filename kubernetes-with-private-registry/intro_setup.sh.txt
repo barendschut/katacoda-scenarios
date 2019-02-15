@@ -1,11 +1,13 @@
 #!/bin/sh -eux
 
-ssh() {
+sloppy_ssh() {
     /usr/bin/ssh -oBatchMode=yes -o TCPKeepAlive=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=30 -o ConnectTimeout=30 -o ConnectionAttempts=30 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=error" "$@";
 }
-scp() {
+
+sloppy_scp() {
     /usr/bin/scp -oBatchMode=yes -o TCPKeepAlive=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=30 -o ConnectTimeout=30 -o ConnectionAttempts=30 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=error" "$@";
 }
+
 REGISTRY_DOMAIN=registry.workshop.breda.local;
 REGISTRY_IP=[[HOST_IP]];
 CERTS_PATH=~/.certs;
@@ -22,16 +24,16 @@ main() {
 
 getKubeconfigFrom() {
     HOST="$1";
-    scp root@"$HOST":/root/.kube/config ~/.kube/;
+    sloppy_scp root@"$HOST":/root/.kube/config ~/.kube/;
 }
 
 setUpEtcHostsOn() {
-    ssh root@"$HOST" "echo '${REGISTRY_IP}' '${REGISTRY_DOMAIN}' >> /etc/hosts"
+    sloppy_ssh root@"$HOST" "echo '${REGISTRY_IP}' '${REGISTRY_DOMAIN}' >> /etc/hosts"
 }
 
 runDockerRegistry() {
     HOST="$1";
-    ssh root@"$HOST" "\
+    sloppy_ssh root@"$HOST" "\
         docker run -d -p 5000:5000 \
             -v /root/certs:/certs \
             -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/$REGISTRY_DOMAIN.crt \
@@ -69,14 +71,14 @@ setUpCertsOn() {
     export REGISTRY_DOMAIN;
     CERTS_PATH="$1";
     HOST="$2";
-    ssh root@"$HOST" "\
+    sloppy_ssh root@"$HOST" "\
         mkdir -p /usr/local/share/ca-certificates/${REGISTRY_DOMAIN}; \
         mkdir -p /etc/docker/certs.d/${REGISTRY_DOMAIN}; \
     ";
-    scp "$CERTS_PATH"/rootCA.crt root@"$HOST":/usr/local/share/ca-certificates/${REGISTRY_DOMAIN};
-    scp "$CERTS_PATH"/rootCA.crt root@"$HOST":/etc/docker/certs.d/${REGISTRY_DOMAIN}/ca.crt;
-    scp -r "$CERTS_PATH" root@"$HOST":/root/certs;
-    ssh root@"$HOST" "\
+    sloppy_scp "$CERTS_PATH"/rootCA.crt root@"$HOST":/usr/local/share/ca-certificates/${REGISTRY_DOMAIN};
+    sloppy_scp "$CERTS_PATH"/rootCA.crt root@"$HOST":/etc/docker/certs.d/${REGISTRY_DOMAIN}/ca.crt;
+    sloppy_scp -r "$CERTS_PATH" root@"$HOST":/root/certs;
+    sloppy_ssh root@"$HOST" "\
         update-ca-certificates; \
         sudo service docker restart; \
     ";
