@@ -4,4 +4,4 @@ REGISTRY_DOMAIN=registry.workshop.breda.local;
 REGISTRY_IP=[[HOST_IP]];
 CERTS_PATH=~/.certs;
 
-echo "$REGISTRY_IP" > /registry-ip.txt
+echo "$REGISTRY_IP" > /tmp/registry-ip.txt
