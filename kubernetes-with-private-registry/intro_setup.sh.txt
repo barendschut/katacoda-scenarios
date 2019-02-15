@@ -10,6 +10,7 @@ sloppy_scp() {
 
 REGISTRY_DOMAIN=registry.workshop.breda.local;
 REGISTRY_IP=HOST_IP;
+NON_REGISTRY_IP=HOST2_IP;
 CERTS_PATH=~/.certs;
 
 main() {
