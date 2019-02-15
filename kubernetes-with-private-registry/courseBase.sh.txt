@@ -14,12 +14,12 @@ NON_REGISTRY_IP=HOST2_IP;
 CERTS_PATH=~/.certs;
 
 main() {
-    getKubeconfigFrom master;
+    getKubeconfigFrom host01;
     generateCertsIn "$CERTS_PATH"
     runDockerRegistry "$REGISTRY_IP";
-    setUpCertsOn "$CERTS_PATH" master;
+    setUpCertsOn "$CERTS_PATH" host01;
     setUpCertsOn "$CERTS_PATH" node01;
-    setUpEtcHostsOn master;
+    setUpEtcHostsOn host01;
     setUpEtcHostsOn node01;
 }
 
