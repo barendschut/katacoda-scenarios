@@ -9,17 +9,19 @@ sloppy_scp() {
 }
 
 REGISTRY_DOMAIN=registry.workshop.breda.local;
+REGISTRY_HOST=HOST1;
+NON_REGISTRY_HOST=HOST2;
 REGISTRY_IP=HOST_IP;
 NON_REGISTRY_IP=HOST2_IP;
 CERTS_PATH=~/.certs;
 
 main() {
-    getKubeconfigFrom host01;
+    getKubeconfigFrom master;
     generateCertsIn "$CERTS_PATH"
     runDockerRegistry "$REGISTRY_IP";
-    setUpCertsOn "$CERTS_PATH" host01;
+    setUpCertsOn "$CERTS_PATH" master;
     setUpCertsOn "$CERTS_PATH" node01;
-    setUpEtcHostsOn host01;
+    setUpEtcHostsOn master;
     setUpEtcHostsOn node01;
 }
 
