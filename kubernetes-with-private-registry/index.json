@@ -5,8 +5,7 @@
     "steps": [
       {
         "title": "Step 1",
-        "text": "step1.md",
-        "code": "step1_setup.sh"
+        "text": "step1.md"
       }
     ],
     "intro": {
