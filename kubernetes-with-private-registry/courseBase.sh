@@ -2,3 +2,12 @@ ssh root@master "curl -H 'Cache-Control: no-cache' -sSL https://gist.githubuserc
 true
 true
 true
+true
+true
+true
+true
+true
+true
+true
+true
+true
