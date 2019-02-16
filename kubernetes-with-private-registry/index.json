@@ -22,10 +22,6 @@
         {
           "file": "k8s_workshop_breda",
           "target": "~/.ssh/"
-        },
-        {
-          "file": "k8s_workshop_breda.pub",
-          "target": "~/.ssh/"
         }
       ]
     }
