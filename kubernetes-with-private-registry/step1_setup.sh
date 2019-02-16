@@ -84,14 +84,16 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7HCf/bOWHHV73rYHrP89vnPQJNkHitUo72jwuVyYg
 case "$(hostname)" in
     node01)
         clear
-        waitForDockerRegistryLocal
         installKubebox
         installKail
+        waitForDockerRegistryLocal
         waitForKubernetes
         ./kubebox
     ;;
     master)
         clear
+        installKubebox
+        installKail
         waitForDockerRegistryRemote
         waitForKubernetes
         waitForWeave
