@@ -35,7 +35,7 @@ waitForKubernetes() {
 
 installKubebox() {
     echo "[$(date)] Installing kubebox... (~3 sec)"
-    curl -Lo kubebox https://github.com/astefanutti/kubebox/releases/download/v0.4.0/kubebox-linux && chmod +x kubebox
+    >/dev/null 2>/dev/null curl -Lo kubebox https://github.com/astefanutti/kubebox/releases/download/v0.4.0/kubebox-linux && chmod +x kubebox
     echo "[$(date)] done"
 }
 
@@ -45,7 +45,7 @@ case "$(hostname)" in
         waitForDockerRegistryLocal
         installKubebox
         waitForKubernetes
-        kubebox
+        ./kubebox
     ;;
     master)
         clear
