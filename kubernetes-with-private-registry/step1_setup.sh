@@ -62,8 +62,16 @@ killKubeProxyPods() {
     echo "[$(simple_date)] done"
 }
 
+killKubeDNSPods() {
+    echo "[$(simple_date)] Killing kube-dns... (~2 sec)"
+    (
+        2>&1 kubectl delete pods -lkubernetes.io/name=KubeDNS -n kube-system;
+    ) | stdin-spinner
+    echo "[$(simple_date)] done"
+}
+
 killCoreDNSPods() {
-    echo "[$(simple_date)] Restarting core-dns... (~2 sec)"
+    echo "[$(simple_date)] Restarting coredns... (~2 sec)"
     (
         2>&1 kubectl delete pods -lk8s-app=coredns -n kube-system;
         2>&1 kubectl wait deployments/coredns -n kube-system --for condition=available;
@@ -83,7 +91,7 @@ deployMetricsServer() {
 deployDashboard() {
     echo "[$(simple_date)] Deploying Kubernetes dashboard... (~3 sec)"
     (
-        2>&1 kubectl apply -f https://gist.github.com/sgreben/bd04d51eb2f683091ba62d7389a564a8/raw
+        2>&1 kubectl apply -f https://gist.github.com/sgreben/bd04d51eb2f683091ba62d7389a564a8/raw/
         2>&1 kubectl wait deployments/kubernetes-dashboard -n kube-system --for condition=available;
     ) | stdin-spinner
     echo "[$(simple_date)] done"
@@ -131,6 +139,7 @@ case "$(hostname)" in
         clear
         installStdinSpinner
         installKail
+        killKubeDNSPods
         waitForDockerRegistryRemote
         waitForKubernetes
         waitForWeave
