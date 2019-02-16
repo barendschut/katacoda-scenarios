@@ -35,10 +35,12 @@ waitForKubernetes() {
 
 case "$(hostname)" in
     node01)
+        clear
         waitForDockerRegistryLocal
         waitForKubernetes
     ;;
     master)
+        clear
         waitForDockerRegistryRemote
         waitForKubernetes
     ;;
