@@ -64,7 +64,7 @@ installKubebox() {
 
 installKail() {
     echo "[$(date)] Installing kail... (~3 sec)"
-    >/dev/null 2>/dev/null curl -L https://github.com/boz/kail/releases/download/v0.7.0/kail_0.7.0_linux_amd64.tar.gz | tar xz
+    2>/dev/null curl -sSL https://github.com/boz/kail/releases/download/v0.7.0/kail_0.7.0_linux_amd64.tar.gz | tar xz
     chmod +x kail
     mv kail /usr/bin/
     echo "[$(date)] done"
