@@ -110,7 +110,7 @@ installKubebox() {
 installKail() {
     echo "[$(simple_date)] Installing kail... (~3 sec)"
     (
-        2>/dev/null curl -sSL https://github.com/boz/kail/releases/download/v0.7.0/kail_0.7.0_linux_amd64.tar.gz | tar xvz 2>&1
+        curl -sSL https://github.com/boz/kail/releases/download/v0.7.0/kail_0.7.0_linux_amd64.tar.gz | tar xvz 2>&1
     ) | stdin-spinner
     chmod +x kail
     mv kail /usr/bin/
