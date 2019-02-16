@@ -29,6 +29,7 @@
   "environment": {
     "showdashboard": true,
     "uilayout": "terminal-terminal",
+    "dashboard": "Dashboard",
     "uidependencies": [
         "/socket.io/socket.io.js",
         "/javascripts/term.js",
