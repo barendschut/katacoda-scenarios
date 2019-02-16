@@ -92,19 +92,9 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7HCf/bOWHHV73rYHrP89vnPQJNkHitUo72jwuVyYg
 }
 
 case "$(hostname)" in
-    node01)
-        clear
-        waitForNetwork
-        installKubebox
-        installKail
-        waitForDockerRegistryLocal
-        waitForKubernetes
-        kubebox
-    ;;
     master)
         clear
         waitForNetwork
-        installKubebox
         installKail
         waitForDockerRegistryRemote
         waitForKubernetes
@@ -112,5 +102,13 @@ case "$(hostname)" in
         killKubeProxyPods
         deployMetricsServer
         installSSHKey
+    ;;
+    node01)
+        clear
+        waitForNetwork
+        installKail
+        waitForDockerRegistryLocal
+        waitForKubernetes
+        kail
     ;;
 esac
