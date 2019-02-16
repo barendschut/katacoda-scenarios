@@ -14,7 +14,7 @@ waitForDockerRegistryLocal() {
 }
 
 waitForDockerRegistryRemote() {
-    echo "[$(date)] Waiting for Docker registry... (~20 sec)"
+    echo "[$(date)] Waiting for Docker registry... (<1 min)"
     until
         >/dev/null 2>/dev/null curl -sSL https://"$REGISTRY_DOMAIN"/v2/
     do
