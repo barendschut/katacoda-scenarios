@@ -37,6 +37,7 @@
     "dashboards": [{"name": "Kubernetes Dashboard", "port": 30080}]
   },
   "backend": {
+    "port": 30080,
     "dockerimage":"kubeadm-cluster2-running"
   }
 }
