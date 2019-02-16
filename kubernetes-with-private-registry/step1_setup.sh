@@ -94,7 +94,6 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7HCf/bOWHHV73rYHrP89vnPQJNkHitUo72jwuVyYg
 case "$(hostname)" in
     master)
         clear
-        waitForNetwork
         installKail
         waitForDockerRegistryRemote
         waitForKubernetes
@@ -105,7 +104,6 @@ case "$(hostname)" in
     ;;
     node01)
         clear
-        waitForNetwork
         installKail
         waitForDockerRegistryLocal
         waitForKubernetes
