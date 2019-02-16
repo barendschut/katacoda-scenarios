@@ -64,6 +64,7 @@ case "$(hostname)" in
         waitForDockerRegistryLocal
         installKubebox
         waitForKubernetes
+        deployMetricsServer
         ./kubebox
     ;;
     master)
