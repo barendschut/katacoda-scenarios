@@ -4,12 +4,29 @@ Please wait for the initial tasks to finish (i.e. the shell prompt to be ready) 
 
 The Docker registry `registry.workshop.breda.local`{{copy}} is reachable from both nodes (and only from them). Example usage:
 
-1. `docker pull nginx`{{execute}}
-2. `docker tag nginx registry.workshop.breda.local/my-nginx-image`{{execute}}
-3. `docker push registry.workshop.breda.local/my-nginx-image`{{execute}}
-4. `kubectl run nginx-test --image=registry.workshop.breda.local/my-nginx-image`{{execute}}
-5. `kubectl expose deployment nginx-test --type=NodePort --port=30099 --target-port=80 && kubectl patch svc nginx-test --type='json' -p '[{"op":"replace","path":"/spec/ports/0/nodePort","value":30099}]'`{{execute}}
-6. [View NodePort 30099](https://[[HOST_SUBDOMAIN]]-30099-[[KATACODA_HOST]].environments.katacoda.com/)
+### Get an image
+
+`docker pull nginx`{{execute}}
+
+### Tag it using the registry host
+
+`docker tag nginx registry.workshop.breda.local/my-nginx-image`{{execute}}
+
+### Push it to the registry
+
+`docker push registry.workshop.breda.local/my-nginx-image`{{execute}}
+
+### Run it in the cluster
+
+`kubectl run nginx-test --image=registry.workshop.breda.local/my-nginx-image`{{execute}}
+
+### Expose it
+
+`kubectl expose deployment nginx-test --type=NodePort --port=30099 --target-port=80 && kubectl patch svc nginx-test --type='json' -p '[{"op":"replace","path":"/spec/ports/0/nodePort","value":30099}]'`{{execute}}
+
+### View it in the browser
+
+[View NodePort 30099](https://[[HOST_SUBDOMAIN]]-30099-[[KATACODA_HOST]].environments.katacoda.com/)
 
 
 ## Web UI Links
