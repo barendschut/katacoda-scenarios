@@ -9,7 +9,8 @@ waitForDockerRegistryLocal() {
         >/dev/null 2>/dev/null docker inspect -f '{{.ID}}' registry;
     do
         sleep 1
-    done
+        echo .;
+    done | stdin-spinner;
     echo "[$(date)] done"
 }
 
@@ -19,27 +20,28 @@ waitForNetwork() {
         >/dev/null 2>/dev/null curl  --fail --connect-timeout 1 --head https://github.com/
     do
         sleep 1
-    done
+        echo .;
+    done | stdin-spinner;
     echo "[$(date)] done"
 }
 
 waitForDockerRegistryRemote() {
     echo "[$(date)] Waiting for Docker registry... (<1 min)"
     until
-        >/dev/null 2>/dev/null curl -sSL https://"$REGISTRY_DOMAIN"/v2/
+        2>&1 curl -sSL https://"$REGISTRY_DOMAIN"/v2/
     do
         sleep 1
-    done
+    done | stdin-spinner;
     echo "[$(date)] done"
 }
 
 waitForKubernetes() {
     echo "[$(date)] Waiting for Kubernetes... (~5 sec)"
     until
-        >/dev/null 2>/dev/null kubectl version;
+        2>&1 kubectl version;
     do
-        sleep 1
-    done
+        sleep 1;
+    done | stdin-spinner;
     echo "[$(date)] done"
 }
 
@@ -48,25 +50,34 @@ waitForWeave() {
     until
         [ "$(kubectl get daemonset -n kube-system weave-net -o jsonpath='{.status.numberReady}')" = "2" ];
     do
-        sleep 1
-    done
+        sleep 1;
+        echo .;
+    done | stdin-spinner;
     echo "[$(date)] done"
 }
 
 killKubeProxyPods() {
-    >/dev/null 2>/dev/null kubectl delete pods -lk8s-app=kube-proxy -n kube-system;
+    echo "[$(date)] Restarting kube-proxy... (~2 sec)"
+    (
+        2>&1 kubectl delete pods -lk8s-app=kube-proxy -n kube-system;
+    ) | stdin-spinner
+    echo "[$(date)] done"
 }
 
 deployMetricsServer() {
     echo "[$(date)] Deploying metrics-server... (~3 sec)"
-    >/dev/null 2>/dev/null git clone --single-branch --depth=1 https://github.com/kubernetes-incubator/metrics-server
-    >/dev/null 2>/dev/null kubectl create -f metrics-server/deploy/1.8+/
+    (
+        2>&1 git clone --single-branch --depth=1 https://github.com/kubernetes-incubator/metrics-server
+        2>&1 kubectl create -f metrics-server/deploy/1.8+/
+    ) | stdin-spinner
     echo "[$(date)] done"
 }
 
 installKubebox() {
     echo "[$(date)] Installing kubebox... (~3 sec)"
-    curl -Lo kubebox https://github.com/astefanutti/kubebox/releases/download/v0.4.0/kubebox-linux
+    (
+        2>&1 curl -Lo kubebox https://github.com/astefanutti/kubebox/releases/download/v0.4.0/kubebox-linux
+    ) | stdin-spinner
     chmod +x kubebox
     mv kubebox /usr/bin/
     echo "[$(date)] done"
@@ -74,10 +85,18 @@ installKubebox() {
 
 installKail() {
     echo "[$(date)] Installing kail... (~3 sec)"
-    2>/dev/null curl -sSL https://github.com/boz/kail/releases/download/v0.7.0/kail_0.7.0_linux_amd64.tar.gz | tar xz
+    (
+        curl -sSL https://github.com/boz/kail/releases/download/v0.7.0/kail_0.7.0_linux_amd64.tar.gz | tar xvz 2>&1
+    ) | stdin-spinner
     chmod +x kail
     mv kail /usr/bin/
     echo "[$(date)] done"
+}
+
+installStdinSpinner() {
+    2>/dev/null curl -sSL https://github.com/sgreben/stdin-spinner/releases/download/1.0.4/stdin-spinner_1.0.4_linux_x86_64.tar.gz | tar xz
+    chmod +x stdin-spinner
+    mv stdin-spinner /usr/bin/
 }
 
 installSSHKey() {
@@ -94,6 +113,7 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7HCf/bOWHHV73rYHrP89vnPQJNkHitUo72jwuVyYg
 case "$(hostname)" in
     master)
         clear
+        installStdinSpinner
         installKail
         waitForDockerRegistryRemote
         waitForKubernetes
@@ -104,6 +124,7 @@ case "$(hostname)" in
     ;;
     node01)
         clear
+        installStdinSpinner
         installKail
         waitForDockerRegistryLocal
         waitForKubernetes
