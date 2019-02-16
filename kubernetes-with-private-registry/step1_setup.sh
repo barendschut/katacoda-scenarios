@@ -4,7 +4,7 @@ set +x
 REGISTRY_DOMAIN=registry.workshop.breda.local;
 
 waitForDockerRegistryLocal() {
-    echo "[$(date)] Waiting for Docker registry... (~20 sec)"
+    echo "[$(date)] Waiting for Docker registry... (<1 min)"
     until
         >/dev/null 2>/dev/null docker inspect -f '{{.ID}}' registry;
     do
@@ -34,11 +34,10 @@ waitForKubernetes() {
 }
 
 deployMetricsServer() {
-    git clone -q --progress --single-branch --depth=1 https://github.com/kubernetes-incubator/metrics-server
-    (
-        cd metrics-server
-        kubectl create -f deploy/1.8+/
-    )
+    echo "[$(date)] Deploying metrics-server... (~3 sec)"
+    >/dev/null 2>/dev/null git clone -q --progress --single-branch --depth=1 https://github.com/kubernetes-incubator/metrics-server
+    >/dev/null 2>/dev/null kubectl create -f metrics-server/deploy/1.8+/
+    echo "[$(date)] done"
 }
 
 installKubebox() {
