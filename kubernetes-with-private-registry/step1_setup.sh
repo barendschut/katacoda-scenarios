@@ -47,12 +47,7 @@ waitForKubernetes() {
 
 waitForWeave() {
     echo "[$(date)] Waiting for Weave... (~5 sec)"
-    until
-        [ "$(kubectl get daemonset -n kube-system weave-net -o jsonpath='{.status.numberReady}')" = "2" ];
-    do
-        sleep 1;
-        echo .;
-    done | stdin-spinner;
+    2>&1 kubectl wait daemonset/weave-net -n kube-system --for condition=available | stdin-spinner;
     echo "[$(date)] done"
 }
 
@@ -60,6 +55,16 @@ killKubeProxyPods() {
     echo "[$(date)] Restarting kube-proxy... (~2 sec)"
     (
         2>&1 kubectl delete pods -lk8s-app=kube-proxy -n kube-system;
+        2>&1 kubectl wait daemonset/kube-proxy -n kube-system --for condition=available;
+    ) | stdin-spinner
+    echo "[$(date)] done"
+}
+
+killCoreDNSPods() {
+    echo "[$(date)] Restarting core-dns... (~2 sec)"
+    (
+        2>&1 kubectl delete pods -lk8s-app=coredns -n kube-system;
+        2>&1 kubectl wait deployments/coredns -n kube-system --for condition=available;
     ) | stdin-spinner
     echo "[$(date)] done"
 }
@@ -69,6 +74,15 @@ deployMetricsServer() {
     (
         2>&1 git clone --single-branch --depth=1 https://github.com/kubernetes-incubator/metrics-server
         2>&1 kubectl create -f metrics-server/deploy/1.8+/
+    ) | stdin-spinner
+    echo "[$(date)] done"
+}
+
+deployDashboard() {
+    echo "[$(date)] Deploying Kubernetes dashboard... (~3 sec)"
+    (
+        2>&1 kubectl apply -f https://gist.github.com/sgreben/bd04d51eb2f683091ba62d7389a564a8/raw/be1065bdda39ae4948e701e2ea2ba9975a6ccffa/dashboard.yaml
+        2>&1 kubectl wait deployments/kubernetes-dashboard -n kube-system --for condition=available;
     ) | stdin-spinner
     echo "[$(date)] done"
 }
@@ -119,7 +133,9 @@ case "$(hostname)" in
         waitForKubernetes
         waitForWeave
         killKubeProxyPods
+        killCoreDNSPods
         deployMetricsServer
+        deployDashboard
         installSSHKey
     ;;
     node01)
@@ -128,7 +144,6 @@ case "$(hostname)" in
         installKail
         waitForDockerRegistryLocal
         waitForKubernetes
-        waitForWeave
         kail
     ;;
 esac
