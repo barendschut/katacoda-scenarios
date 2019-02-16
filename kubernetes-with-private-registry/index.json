@@ -38,7 +38,6 @@
   },
   "backend": {
     "port": 8080,
-    "imageid": "kubernetes-cluster-running",
     "dockerimage":"kubeadm-cluster2-running"
   }
 }
