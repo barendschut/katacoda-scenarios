@@ -16,12 +16,12 @@ The Docker registry `registry.workshop.breda.local`{{copy}} is reachable from bo
     kubectl expose deployment nginx-test --type=NodePort --port=30099 --target-port=80 && kubectl patch svc nginx-test --type='json' -p '[{"op":"replace","path":"/spec/ports/0/nodePort","value":30099}]'
     ```{{execute}}
 
-- [**View it in the browser**](https://[[HOST_SUBDOMAIN]]-30099-[[KATACODA_HOST]].environments.katacoda.com/)
+- **View it**[in the browser](https://[[HOST_SUBDOMAIN]]-30099-[[KATACODA_HOST]].environments.katacoda.com/)
 
 ## Web UI Links
 
-- [**Kubernetes Dashboard**](https://[[HOST_SUBDOMAIN]]-30080-[[KATACODA_HOST]].environments.katacoda.com/)
+- [Kubernetes Dashboard](https://[[HOST_SUBDOMAIN]]-30080-[[KATACODA_HOST]].environments.katacoda.com/)
 
-- [**App (Web) on NodePort 30001**](https://[[HOST_SUBDOMAIN]]-30001-[[KATACODA_HOST]].environments.katacoda.com/)
+- [App (Web) on NodePort 30001](https://[[HOST_SUBDOMAIN]]-30001-[[KATACODA_HOST]].environments.katacoda.com/)
 
-- [**App (API) on NodePort 30002**](https://[[HOST_SUBDOMAIN]]-30002-[[KATACODA_HOST]].environments.katacoda.com/)
+- [App (API) on NodePort 30002](https://[[HOST_SUBDOMAIN]]-30002-[[KATACODA_HOST]].environments.katacoda.com/)
