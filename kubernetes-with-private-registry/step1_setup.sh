@@ -107,6 +107,7 @@ case "$(hostname)" in
         installKail
         waitForDockerRegistryLocal
         waitForKubernetes
+        waitForWeave
         kail
     ;;
 esac
