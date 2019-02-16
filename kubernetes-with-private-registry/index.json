@@ -1,10 +1,10 @@
 {
-  "title": "Kubernetes (with private Docker registry)",
-  "description": "Sandbox",
+  "title": "Kubernetes Sandbox",
+  "description": "A 2-node Kubernetes cluster with a private Docker registry",
   "details": {
     "steps": [
       {
-        "title": "Step 1",
+        "title": "Sandbox",
         "text": "step1.md",
         "code": "step1_setup.sh"
       }
