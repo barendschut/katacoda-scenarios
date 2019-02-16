@@ -1,5 +1,6 @@
 #!/bin/sh -eu
 
+set +x
 REGISTRY_DOMAIN=registry.workshop.breda.local;
 
 waitForDockerRegistryLocal() {
