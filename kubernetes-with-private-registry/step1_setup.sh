@@ -44,7 +44,7 @@ waitForWeave() {
 }
 
 killKubeProxyPods() {
-    >/dev/null 2>/dev/null kubectl delete pods -lk8s-app=kube-proxy --all-namespaces;
+    >/dev/null 2>/dev/null kubectl delete pods -lk8s-app=kube-proxy -n kube-system;
 }
 
 deployMetricsServer() {
@@ -88,7 +88,7 @@ case "$(hostname)" in
         installKail
         waitForDockerRegistryLocal
         waitForKubernetes
-        ./kubebox
+        kubebox
     ;;
     master)
         clear
