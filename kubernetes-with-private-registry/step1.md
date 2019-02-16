@@ -4,6 +4,15 @@ Please wait for the initial tasks to finish (i.e. the shell prompt to be ready) 
 
 The Docker registry `registry.workshop.breda.local`{{copy}} is reachable from both nodes (and only from them). Example usage:
 
+```shell
+docker pull nginx
+docker tag nginx registry.workshop.breda.local/my-nginx-image
+docker push registry.workshop.breda.local/my-nginx-image
+kubectl run nginx-test --image=registry.workshop.breda.local/my-nginx-image
+kubectl expose deployment nginx-test --type=NodePort --port=30099 --target-port=80 && kubectl patch svc nginx-test --type='json' -p '[{"op":"replace","path":"/spec/ports/0/nodePort","value":30099}]'
+```
+{{execute}}
+
 ### Get an image
 
 `docker pull nginx`{{execute}}
