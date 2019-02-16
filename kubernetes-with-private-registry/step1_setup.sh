@@ -100,7 +100,7 @@ deployDashboard() {
 installKubebox() {
     echo "[$(simple_date)] Installing kubebox... (~3 sec)"
     (
-        2>&1 curl -Lo kubebox https://github.com/astefanutti/kubebox/releases/download/v0.4.0/kubebox-linux
+        2>&1 curl -ksSLo kubebox https://github.com/astefanutti/kubebox/releases/download/v0.4.0/kubebox-linux
     ) | stdin-spinner
     chmod +x kubebox
     mv kubebox /usr/bin/
@@ -110,7 +110,7 @@ installKubebox() {
 installKail() {
     echo "[$(simple_date)] Installing kail... (~3 sec)"
     (
-        curl -sSL https://github.com/boz/kail/releases/download/v0.7.0/kail_0.7.0_linux_amd64.tar.gz | tar xvz 2>&1
+        curl -ksSL https://github.com/boz/kail/releases/download/v0.7.0/kail_0.7.0_linux_amd64.tar.gz | tar xvz 2>&1
     ) | stdin-spinner
     chmod +x kail
     mv kail /usr/bin/
@@ -118,7 +118,7 @@ installKail() {
 }
 
 installStdinSpinner() {
-    2>/dev/null curl -sSL https://github.com/sgreben/stdin-spinner/releases/download/1.0.4/stdin-spinner_1.0.4_linux_x86_64.tar.gz | tar xz
+    2>/dev/null curl -ksSL https://github.com/sgreben/stdin-spinner/releases/download/1.0.4/stdin-spinner_1.0.4_linux_x86_64.tar.gz | tar xz
     chmod +x stdin-spinner
     mv stdin-spinner /usr/bin/
 }
