@@ -4,7 +4,7 @@ set +x
 REGISTRY_DOMAIN=registry.workshop.breda.local;
 
 waitForDockerRegistryLocal() {
-    echo "[$(date)] Waiting for Docker registry..."
+    echo "[$(date)] Waiting for Docker registry... (~20 sec)"
     until
         >/dev/null 2>/dev/null docker inspect -f '{{.ID}}' registry;
     do
@@ -14,7 +14,7 @@ waitForDockerRegistryLocal() {
 }
 
 waitForDockerRegistryRemote() {
-    echo "[$(date)] Waiting for Docker registry..."
+    echo "[$(date)] Waiting for Docker registry... (~20 sec)"
     until
         >/dev/null 2>/dev/null curl -sSL https://"$REGISTRY_DOMAIN":5000/v2/
     do
@@ -24,7 +24,7 @@ waitForDockerRegistryRemote() {
 }
 
 waitForKubernetes() {
-    echo "[$(date)] Waiting for Kubernetes..."
+    echo "[$(date)] Waiting for Kubernetes... (~5 sec)"
     until
         >/dev/null 2>/dev/null kubectl version;
     do
