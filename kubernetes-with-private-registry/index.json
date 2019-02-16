@@ -28,16 +28,15 @@
   },
   "environment": {
     "showdashboard": true,
-    "dashboard": "Dashboard",
     "uilayout": "terminal-terminal-v1",
     "uidependencies": [
         "/socket.io/socket.io.js",
         "/javascripts/term.js",
         "/javascripts/terminal-application.js"
-    ]
+    ],
+    "dashboards": [{"name": "Kubernetes Dashboard", "port": 30080}]
   },
   "backend": {
-    "port": 30080,
     "dockerimage":"kubeadm-cluster2-running"
   }
 }
