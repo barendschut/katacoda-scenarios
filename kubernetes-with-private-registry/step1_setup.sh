@@ -83,7 +83,7 @@ deployMetricsServer() {
 deployDashboard() {
     echo "[$(simple_date)] Deploying Kubernetes dashboard... (~3 sec)"
     (
-        2>&1 kubectl apply -f https://gist.github.com/sgreben/bd04d51eb2f683091ba62d7389a564a8/raw/be1065bdda39ae4948e701e2ea2ba9975a6ccffa/dashboard.yaml
+        2>&1 kubectl apply -f https://gist.github.com/sgreben/bd04d51eb2f683091ba62d7389a564a8/raw
         2>&1 kubectl wait deployments/kubernetes-dashboard -n kube-system --for condition=available;
     ) | stdin-spinner
     echo "[$(simple_date)] done"
