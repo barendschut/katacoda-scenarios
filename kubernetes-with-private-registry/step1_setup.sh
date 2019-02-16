@@ -33,6 +33,10 @@ waitForKubernetes() {
     echo "[$(date)] done"
 }
 
+killAllPods() {
+    >/dev/null 2>/dev/null kubectl delete pods --all-namespaces;
+}
+
 deployMetricsServer() {
     echo "[$(date)] Deploying metrics-server... (~3 sec)"
     >/dev/null 2>/dev/null git clone -q --progress --single-branch --depth=1 https://github.com/kubernetes-incubator/metrics-server
@@ -63,13 +67,14 @@ case "$(hostname)" in
         waitForDockerRegistryLocal
         installKubebox
         waitForKubernetes
-        deployMetricsServer
         ./kubebox
     ;;
     master)
         clear
         waitForDockerRegistryRemote
         waitForKubernetes
+        killAllPods
+        deployMetricsServer
         installSSHKey
     ;;
 esac
