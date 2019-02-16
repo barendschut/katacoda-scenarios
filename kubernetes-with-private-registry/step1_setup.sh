@@ -33,8 +33,18 @@ waitForKubernetes() {
     echo "[$(date)] done"
 }
 
-killAllPods() {
-    >/dev/null 2>/dev/null kubectl delete pods --all-namespaces;
+waitForWeave() {
+    echo "[$(date)] Waiting for Weave... (~5 sec)"
+    until
+        [ "$(kubectl get daemonset -n kube-system weave-net -o jsonpath='{.status.numberReady}')" = "2" ];
+    do
+        sleep 1
+    done
+    echo "[$(date)] done"
+}
+
+killKubeProxyPods() {
+    >/dev/null 2>/dev/null kubectl delete pods -lk8s-app=kube-proxy --all-namespaces;
 }
 
 deployMetricsServer() {
@@ -46,7 +56,17 @@ deployMetricsServer() {
 
 installKubebox() {
     echo "[$(date)] Installing kubebox... (~3 sec)"
-    >/dev/null 2>/dev/null curl -Lo kubebox https://github.com/astefanutti/kubebox/releases/download/v0.4.0/kubebox-linux && chmod +x kubebox
+    >/dev/null 2>/dev/null curl -Lo kubebox https://github.com/astefanutti/kubebox/releases/download/v0.4.0/kubebox-linux
+    chmod +x kubebox
+    mv kubebox /usr/bin/
+    echo "[$(date)] done"
+}
+
+installKail() {
+    echo "[$(date)] Installing kail... (~3 sec)"
+    >/dev/null 2>/dev/null curl -L https://github.com/boz/kail/releases/download/v0.7.0/kail_0.7.0_linux_amd64.tar.gz | tar xz
+    chmod +x kail
+    mv kail /usr/bin/
     echo "[$(date)] done"
 }
 
@@ -66,6 +86,7 @@ case "$(hostname)" in
         clear
         waitForDockerRegistryLocal
         installKubebox
+        installKail
         waitForKubernetes
         ./kubebox
     ;;
@@ -73,7 +94,8 @@ case "$(hostname)" in
         clear
         waitForDockerRegistryRemote
         waitForKubernetes
-        killAllPods
+        killKubeProxyPods
+        waitForWeave
         deployMetricsServer
         installSSHKey
     ;;
