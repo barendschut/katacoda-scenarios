@@ -13,6 +13,16 @@ waitForDockerRegistryLocal() {
     echo "[$(date)] done"
 }
 
+waitForNetwork() {
+    echo "[$(date)] Waiting for network connectivity... (<1 min)"
+    until
+        >/dev/null 2>/dev/null curl  --fail --connect-timeout 1 --head https://github.com/
+    do
+        sleep 1
+    done
+    echo "[$(date)] done"
+}
+
 waitForDockerRegistryRemote() {
     echo "[$(date)] Waiting for Docker registry... (<1 min)"
     until
@@ -84,6 +94,7 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7HCf/bOWHHV73rYHrP89vnPQJNkHitUo72jwuVyYg
 case "$(hostname)" in
     node01)
         clear
+        waitForNetwork
         installKubebox
         installKail
         waitForDockerRegistryLocal
@@ -92,6 +103,7 @@ case "$(hostname)" in
     ;;
     master)
         clear
+        waitForNetwork
         installKubebox
         installKail
         waitForDockerRegistryRemote
