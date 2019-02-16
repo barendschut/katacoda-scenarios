@@ -10,8 +10,7 @@ docker tag nginx registry.workshop.breda.local/my-nginx-image
 docker push registry.workshop.breda.local/my-nginx-image
 kubectl run nginx-test --image=registry.workshop.breda.local/my-nginx-image
 kubectl expose deployment nginx-test --type=NodePort --port=30099 --target-port=80 && kubectl patch svc nginx-test --type='json' -p '[{"op":"replace","path":"/spec/ports/0/nodePort","value":30099}]'
-```
-{{execute}}
+```{{execute}}
 
 ### Get an image
 
