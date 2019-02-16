@@ -59,14 +59,14 @@ killKubeProxyPods() {
 
 deployMetricsServer() {
     echo "[$(date)] Deploying metrics-server... (~3 sec)"
-    >/dev/null 2>/dev/null git clone -q --progress --single-branch --depth=1 https://github.com/kubernetes-incubator/metrics-server
+    >/dev/null 2>/dev/null git clone --single-branch --depth=1 https://github.com/kubernetes-incubator/metrics-server
     >/dev/null 2>/dev/null kubectl create -f metrics-server/deploy/1.8+/
     echo "[$(date)] done"
 }
 
 installKubebox() {
     echo "[$(date)] Installing kubebox... (~3 sec)"
-    >/dev/null 2>/dev/null curl -Lo kubebox https://github.com/astefanutti/kubebox/releases/download/v0.4.0/kubebox-linux
+    curl -Lo kubebox https://github.com/astefanutti/kubebox/releases/download/v0.4.0/kubebox-linux
     chmod +x kubebox
     mv kubebox /usr/bin/
     echo "[$(date)] done"
