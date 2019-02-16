@@ -94,8 +94,8 @@ case "$(hostname)" in
         clear
         waitForDockerRegistryRemote
         waitForKubernetes
-        killKubeProxyPods
         waitForWeave
+        killKubeProxyPods
         deployMetricsServer
         installSSHKey
     ;;
