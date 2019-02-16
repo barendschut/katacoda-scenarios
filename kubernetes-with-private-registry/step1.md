@@ -1,8 +1,7 @@
 ## Docker registry
 
-The Docker registry `registry.workshop.breda.local`{{copy}} is reachable from both nodes (and only from them).
+The Docker registry `registry.workshop.breda.local`{{copy}} is reachable from both nodes (and only from them). Example usage:
 
-Example usage:
 1. `docker pull nginx`{{execute}}
 1. `docker tag nginx registry.workshop.breda.local/my-nginx-image`{{execute}}
 1. `docker push registry.workshop.breda.local/my-nginx-image`{{execute}}
