@@ -109,7 +109,7 @@ deployDashboard() {
 }
 
 installTools() {
-    echo "[$(simple_date)] Installing tools... (~3 sec)"
+    echo "[$(simple_date)] Installing tools... (~15 sec)"
     (
         exec 2>&1
         installKustomize &
@@ -184,6 +184,7 @@ case "$(hostname)" in
         waitForWeave
         killKubeProxyPods
         killCoreDNSPods
+        clear
         installSSHKey
     ;;
     node01)
@@ -194,6 +195,7 @@ case "$(hostname)" in
         runDockerRegistry
         waitForDockerRegistryLocal
         waitForKubernetes
+        clear
         echo '$ kail -lapp.kubernetes.io/part-of=example-3tier-app'
         kail -lapp.kubernetes.io/part-of=example-3tier-app
     ;;
