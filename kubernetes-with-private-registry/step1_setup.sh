@@ -143,6 +143,7 @@ case "$(hostname)" in
         clear
         installStdinSpinner
         installKail
+        waitForDockerUpgrade
         killKubeDNSPods
         waitForDockerRegistryRemote
         waitForWeave
@@ -155,6 +156,7 @@ case "$(hostname)" in
         clear
         installStdinSpinner
         installKail
+        waitForDockerUpgrade
         waitForDockerRegistryLocal
         waitForKubernetes
         echo '$ kail -lapp.kubernetes.io/part-of=example-3tier-app'
