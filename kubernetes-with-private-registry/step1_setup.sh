@@ -121,21 +121,13 @@ installTools() {
 }
 
 installKustomize() {
-    echo "[$(simple_date)] Installing kustomize... (~3 sec)"
-    (
-        2>&1 curl -ksSLo /usr/local/bin/kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v2.0.1/kustomize_2.0.1_linux_amd64;
-        chmod +x /usr/local/bin/docker-compose;
-    ) | stdin-spinner
-    echo "[$(simple_date)] done"
+    curl -kLo /usr/local/bin/kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v2.0.1/kustomize_2.0.1_linux_amd64;
+    chmod +x /usr/local/bin/docker-compose;
 }
 
 installDockerCompose() {
-    echo "[$(simple_date)] Installing docker-compose... (~3 sec)"
-    (
-        2>&1 curl -ksSLo /usr/local/bin/docker-compose https://github.com/docker/compose/releases/download/1.24.0-rc1/docker-compose-"$(uname -s)"-"$(uname -m)";
-        chmod +x /usr/local/bin/docker-compose;
-    ) | stdin-spinner
-    echo "[$(simple_date)] done"
+    curl -kLo /usr/local/bin/docker-compose https://github.com/docker/compose/releases/download/1.24.0-rc1/docker-compose-"$(uname -s)"-"$(uname -m)";
+    chmod +x /usr/local/bin/docker-compose;
 }
 
 installKail() {
