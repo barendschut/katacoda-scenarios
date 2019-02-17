@@ -10,7 +10,7 @@ waitForDockerRegistryLocal() {
     until
         >/dev/null 2>/dev/null docker inspect -f '{{.ID}}' registry;
     do
-        sleep 0.1;
+        sleep 0.5;
         echo .;
     done | stdin-spinner;
     echo "[$(simple_date)] done"
@@ -20,11 +20,13 @@ waitForDockerUpgrade() {
     echo "[$(simple_date)] Waiting for Docker upgrade... (<1 min)"
     (
         until [ -e /opt/upgrade-docker ] || [ -e /opt/upgrade-docker-done ]; do
-            sleep 1;
+            echo .;
+            sleep 0.5;
         done;
         2>&1 cat /opt/upgrade-docker || true;
         until 2>&1 docker version; do
-            sleep 1;
+            echo .;
+            sleep 0.5;
         done;
     ) | stdin-spinner;
     echo "[$(simple_date)] done"
@@ -35,7 +37,7 @@ waitForDockerRegistryRemote() {
     until
         2>&1 curl -sSL https://"$REGISTRY_DOMAIN"/v2/
     do
-        sleep 0.1;
+        sleep 0.5;
     done | stdin-spinner;
     echo "[$(simple_date)] done"
 }
