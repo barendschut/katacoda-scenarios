@@ -156,8 +156,11 @@ installStdinSpinner() {
 }
 
 configureGit() {
-    git config --global user.email "mail@example.com"
-    git config --global user.name "name"
+    (
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
+        git config --global user.email "mail@example.com"
+        git config --global user.name "name"
+    ) | stdin-spinner
     alias g=git
 }
 
