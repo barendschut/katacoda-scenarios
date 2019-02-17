@@ -57,24 +57,20 @@ killKubeProxyPods() {
     echo "[$(simple_date)] Restarting kube-proxy... (~2 sec)"
     (
         2>&1 kubectl delete pods -lk8s-app=kube-proxy -n kube-system;
-        2>&1 kubectl wait daemonset/kube-proxy -n kube-system --for condition=available;
+        2>&1 kubectl -v999 wait daemonset/kube-proxy -n kube-system --for condition=available;
     ) | stdin-spinner
     echo "[$(simple_date)] done"
 }
 
 killKubeDNSPods() {
-    echo "[$(simple_date)] Killing kube-dns... (~2 sec)"
-    (
-        2>&1 kubectl delete pods -lkubernetes.io/name=KubeDNS -n kube-system;
-    ) | stdin-spinner
-    echo "[$(simple_date)] done"
+    2>&1 kubectl delete pods -lkubernetes.io/name=KubeDNS -n kube-system;
 }
 
 killCoreDNSPods() {
     echo "[$(simple_date)] Restarting coredns... (~2 sec)"
     (
         2>&1 kubectl delete pods -lk8s-app=coredns -n kube-system;
-        2>&1 kubectl wait deployments/coredns -n kube-system --for condition=available;
+        2>&1 kubectl -v999 wait deployments/coredns -n kube-system --for condition=available;
     ) | stdin-spinner
     echo "[$(simple_date)] done"
 }
@@ -83,7 +79,7 @@ deployMetricsServer() {
     echo "[$(simple_date)] Deploying metrics-server... (~3 sec)"
     (
         2>&1 git clone --single-branch --depth=1 https://github.com/kubernetes-incubator/metrics-server
-        2>&1 kubectl create -f metrics-server/deploy/1.8+/
+        2>&1 kubectl -v999 create -f metrics-server/deploy/1.8+/
     ) | stdin-spinner
     echo "[$(simple_date)] done"
 }
@@ -92,7 +88,7 @@ deployDashboard() {
     echo "[$(simple_date)] Deploying Kubernetes dashboard... (~3 sec)"
     (
         2>&1 kubectl apply -f https://gist.github.com/sgreben/bd04d51eb2f683091ba62d7389a564a8/raw//
-        2>&1 kubectl wait deployments/kubernetes-dashboard -n kube-system --for condition=available;
+        2>&1 kubectl -v999 wait deployments/kubernetes-dashboard -n kube-system --for condition=available;
     ) | stdin-spinner
     echo "[$(simple_date)] done"
 }
