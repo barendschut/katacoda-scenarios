@@ -63,7 +63,7 @@ killKubeProxyPods() {
 }
 
 killKubeDNSPods() {
-    2>&1 kubectl delete pods -lkubernetes.io/name=KubeDNS -n kube-system;
+    >/dev/null 2>/dev/null kubectl delete pods -lkubernetes.io/name=KubeDNS -n kube-system;
 }
 
 killCoreDNSPods() {
