@@ -214,8 +214,8 @@ tinyCI() {
 case "$(hostname)" in
     master)
         clear
-        configureGit
         installStdinSpinner
+        configureGit
         installTools
         waitForDockerUpgrade
         killKubeDNSPods
