@@ -25,7 +25,7 @@
         },
         {
           "file": "tiny-ci",
-          "target": "/usr/local/bin/tiny-ci"
+          "target": "/usr/local/bin/"
         }
       ]
     }
