@@ -5,6 +5,17 @@ REGISTRY_DOMAIN=registry.workshop.breda.local;
 
 alias simple_date="date +'%H:%M:%S'"
 
+upgradeDocker() {
+    echo "[$(simple_date)] Upgrading Docker... (<1 min)"
+    (
+        exec 2>&1
+        export DEBIAN_FRONTEND=noninteractive
+        apt-get -y update
+        apt-get -y install docker.io
+    ) | stdin-spinner;
+    echo "[$(simple_date)] done"
+}
+
 waitForDockerRegistryLocal() {
     echo "[$(simple_date)] Waiting for Docker registry... (<1 min)"
     until
@@ -147,6 +158,7 @@ case "$(hostname)" in
     master)
         clear
         installStdinSpinner
+        upgradeDocker
         installKail
         killKubeDNSPods
         waitForDockerRegistryRemote
@@ -159,6 +171,7 @@ case "$(hostname)" in
     node01)
         clear
         installStdinSpinner
+        upgradeDocker
         installKail
         waitForDockerRegistryLocal
         waitForKubernetes
