@@ -179,8 +179,9 @@ case "$(hostname)" in
         waitForDockerUpgrade
         killKubeDNSPods
         waitForDockerRegistryRemote
-        waitForWeave
+        waitForKubernetes
         deployDashboard
+        waitForWeave
         killKubeProxyPods
         killCoreDNSPods
         installSSHKey
