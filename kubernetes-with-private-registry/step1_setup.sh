@@ -108,13 +108,33 @@ deployDashboard() {
     echo "[$(simple_date)] done"
 }
 
-installKubebox() {
-    echo "[$(simple_date)] Installing kubebox... (~3 sec)"
+installTools() {
+    echo "[$(simple_date)] Installing tools... (~3 sec)"
     (
-        2>&1 curl -ksSLo kubebox https://github.com/astefanutti/kubebox/releases/download/v0.4.0/kubebox-linux
+        exec 2>&1
+        installKustomize &
+        installDockerCompose &
+        installKail &
+        wait
+    ) | stdin-spinner;
+    echo "[$(simple_date)] done"
+}
+
+installKustomize() {
+    echo "[$(simple_date)] Installing kustomize... (~3 sec)"
+    (
+        2>&1 curl -ksSLo /usr/local/bin/kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v2.0.1/kustomize_2.0.1_linux_amd64;
+        chmod +x /usr/local/bin/docker-compose;
     ) | stdin-spinner
-    chmod +x kubebox
-    mv kubebox /usr/bin/
+    echo "[$(simple_date)] done"
+}
+
+installDockerCompose() {
+    echo "[$(simple_date)] Installing docker-compose... (~3 sec)"
+    (
+        2>&1 curl -ksSLo /usr/local/bin/docker-compose https://github.com/docker/compose/releases/download/1.24.0-rc1/docker-compose-"$(uname -s)"-"$(uname -m)";
+        chmod +x /usr/local/bin/docker-compose;
+    ) | stdin-spinner
     echo "[$(simple_date)] done"
 }
 
@@ -163,7 +183,7 @@ case "$(hostname)" in
     master)
         clear
         installStdinSpinner
-        installKail
+        installTools
         waitForDockerUpgrade
         killKubeDNSPods
         waitForDockerRegistryRemote
