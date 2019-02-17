@@ -18,7 +18,7 @@ waitForDockerRegistryLocal() {
 
 waitForDockerUpgrade() {
     echo "[$(simple_date)] Upgrading docker... (<1 min)"
-    </opt/update-docker stdin-spinner;
+    </opt/update-docker stdin-spinner || true;
     echo "[$(simple_date)] done"
 }
 
