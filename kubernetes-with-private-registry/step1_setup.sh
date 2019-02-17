@@ -200,7 +200,7 @@ tinyCI() {
             docker-compose push;
             kustomize build ../deployment/base/ | kubectl apply -f -;
         );
-        echo 'Waiting for changes...';
+        echo "Polling for changes to $(git remote get-url origin)...";
         while true; do
             2>&1 git fetch -v --progress origin;
             if [ "$(2>&1 git rev-parse HEAD)" != "$(2>&1 git rev-parse origin/"$BRANCH")" ]; then
