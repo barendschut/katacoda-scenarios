@@ -207,6 +207,7 @@ case "$(hostname)" in
         killCoreDNSPods
         clear
         installSSHKey
+        chmod +x /usr/local/bin/tiny-ci
     ;;
     node01)
         clear
