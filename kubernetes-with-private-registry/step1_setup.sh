@@ -165,12 +165,12 @@ installSSHKey() {
     >/dev/null 2>/dev/null chmod 400 ~/.ssh/k8s_workshop_breda;
     >/dev/null 2>/dev/null eval "$(ssh-agent)"
     >/dev/null 2>/dev/null ssh-add ~/.ssh/k8s_workshop_breda;
-    echo "[$(simple_date)] SSH public key:
-
+    cat <<EOF
+$(simple_date)] SSH public key:
 
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7HCf/bOWHHV73rYHrP89vnPQJNkHitUo72jwuVyYg6/LeNWG4KwIhzs9BRHNqcZp90NjfbibKCchmVZnuylXkyE3YwfYCAt1lZ6zWBt2jcPGRCBDfaqlZEAXjgjOywMM1KMzf9SZAJBQTYsC893BImclg6wfORm/RZupakP7QYixPNjo94W9HGkMeO6fYdI2uk48/T+qKw0kdFdw3DTRXaxSFmof+4NdSxk8N5Hf9W2l2AWNkOZlRnhQgnwI++thfwbAhu4OjY17P8Fdazc+NhYO+OuOUMdBzVDs+88kD5jq5mS/NxUSK+ShywIpqlTnk98RyFTNoM3nnWGIX5uzh k8s-workshop@breda
 
-    "
+EOF
 }
 
 runDockerRegistry() {
