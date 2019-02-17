@@ -49,7 +49,14 @@ waitForKubernetes() {
 
 waitForWeave() {
     echo "[$(simple_date)] Waiting for Weave... (~5 sec)"
-    2>&1 kubectl -v999 wait daemonset/weave-net -n kube-system --for condition=Available | stdin-spinner;
+    (
+        until
+            [ "$(kubectl get daemonset -n kube-system weave-net -o jsonpath='{.status.numberReady}')" = "2" ];
+        do
+            echo .;
+            sleep 1;
+        done;
+    ) | stdin-spinner
     echo "[$(simple_date)] done"
 }
 
@@ -57,7 +64,12 @@ killKubeProxyPods() {
     echo "[$(simple_date)] Restarting kube-proxy... (~2 sec)"
     (
         2>&1 kubectl delete pods -lk8s-app=kube-proxy -n kube-system;
-        2>&1 kubectl -v999 wait daemonset/kube-proxy -n kube-system --for condition=Available;
+        until
+            [ "$(kubectl get daemonset -n kube-system kube-proxy -o jsonpath='{.status.numberReady}')" = "2" ];
+        do
+            echo .;
+            sleep 1;
+        done;
     ) | stdin-spinner
     echo "[$(simple_date)] done"
 }
@@ -70,7 +82,7 @@ killCoreDNSPods() {
     echo "[$(simple_date)] Restarting coredns... (~2 sec)"
     (
         2>&1 kubectl delete pods -lk8s-app=coredns -n kube-system;
-        2>&1 kubectl -v999 wait deployments/coredns -n kube-system --for condition=available;
+        2>&1 kubectl -v999 wait deployments/coredns -n kube-system --for condition=Available;
     ) | stdin-spinner
     echo "[$(simple_date)] done"
 }
@@ -88,7 +100,7 @@ deployDashboard() {
     echo "[$(simple_date)] Deploying Kubernetes dashboard... (~3 sec)"
     (
         2>&1 kubectl apply -f https://gist.github.com/sgreben/bd04d51eb2f683091ba62d7389a564a8/raw//
-        2>&1 kubectl -v999 wait deployments/kubernetes-dashboard -n kube-system --for condition=available;
+        2>&1 kubectl -v999 wait deployments/kubernetes-dashboard -n kube-system --for condition=Available;
     ) | stdin-spinner
     echo "[$(simple_date)] done"
 }
