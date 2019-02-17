@@ -143,12 +143,9 @@ case "$(hostname)" in
         killKubeDNSPods
         waitForDockerRegistryRemote
         waitForWeave
-        (
-            deployDashboard &
-            killKubeProxyPods &
-            killCoreDNSPods &
-            wait
-        )
+        deployDashboard
+        killKubeProxyPods
+        killCoreDNSPods
         installSSHKey
     ;;
     node01)
