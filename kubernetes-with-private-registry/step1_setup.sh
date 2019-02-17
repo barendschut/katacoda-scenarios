@@ -17,7 +17,7 @@ waitForDockerRegistryLocal() {
 }
 
 waitForDockerUpgrade() {
-    echo "[$(simple_date)] Upgrading docker... (<1 min)"
+    echo "[$(simple_date)] Waiting for Docker upgrade... (<1 min)"
     (
         until [ -e /opt/upgrade-docker ] || [ -e /opt/upgrade-docker-done ]; do
             sleep 1;
