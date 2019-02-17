@@ -145,7 +145,7 @@ installKail() {
 installStern() {
     echo "[$(simple_date)] Installing stern... (~3 sec)"
     (
-        2>&1 curl -ksSLo /usr/local/bin/stern https://github.com/wercker/stern/releases/download/1.10.0/stern_linux_amd64
+        2>&1 curl -Lo /usr/local/bin/stern https://github.com/wercker/stern/releases/download/1.10.0/stern_linux_amd64
         chmod +x /usr/local/bin/stern;
     ) | stdin-spinner
     echo "[$(simple_date)] done"
