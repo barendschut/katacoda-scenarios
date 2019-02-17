@@ -146,6 +146,11 @@ installStdinSpinner() {
     mv stdin-spinner /usr/bin/
 }
 
+configureGit() {
+    git config --global user.email "mail@example.com"
+    git config --global user.name "name"
+}
+
 installSSHKey() {
     >/dev/null 2>/dev/null chmod 400 ~/.ssh/k8s_workshop_breda;
     >/dev/null 2>/dev/null eval "$(ssh-agent)"
@@ -174,6 +179,7 @@ runDockerRegistry() {
 case "$(hostname)" in
     master)
         clear
+        configureGit
         installStdinSpinner
         installTools
         waitForDockerUpgrade
