@@ -10,7 +10,7 @@ waitForDockerRegistryLocal() {
     until
         >/dev/null 2>/dev/null docker inspect -f '{{.ID}}' registry;
     do
-        sleep 0.1
+        sleep 0.1;
         echo .;
     done | stdin-spinner;
     echo "[$(simple_date)] done"
@@ -30,7 +30,7 @@ waitForDockerRegistryRemote() {
     until
         2>&1 curl -sSL https://"$REGISTRY_DOMAIN"/v2/
     do
-        sleep 1
+        sleep 0.1;
     done | stdin-spinner;
     echo "[$(simple_date)] done"
 }
