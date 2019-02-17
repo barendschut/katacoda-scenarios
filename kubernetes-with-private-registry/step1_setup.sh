@@ -122,7 +122,7 @@ installTools() {
 
 installKustomize() {
     curl -kLo /usr/local/bin/kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v2.0.1/kustomize_2.0.1_linux_amd64;
-    chmod +x /usr/local/bin/docker-compose;
+    chmod +x /usr/local/bin/kustomize;
 }
 
 installDockerCompose() {
