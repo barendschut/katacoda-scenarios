@@ -49,7 +49,7 @@ waitForKubernetes() {
 
 waitForWeave() {
     echo "[$(simple_date)] Waiting for Weave... (~5 sec)"
-    2>&1 kubectl wait daemonset/weave-net -n kube-system --for condition=available | stdin-spinner;
+    2>&1 kubectl -v999 wait daemonset/weave-net -n kube-system --for condition=Available | stdin-spinner;
     echo "[$(simple_date)] done"
 }
 
@@ -57,13 +57,13 @@ killKubeProxyPods() {
     echo "[$(simple_date)] Restarting kube-proxy... (~2 sec)"
     (
         2>&1 kubectl delete pods -lk8s-app=kube-proxy -n kube-system;
-        2>&1 kubectl -v999 wait daemonset/kube-proxy -n kube-system --for condition=available;
+        2>&1 kubectl -v999 wait daemonset/kube-proxy -n kube-system --for condition=Available;
     ) | stdin-spinner
     echo "[$(simple_date)] done"
 }
 
 killKubeDNSPods() {
-    >/dev/null 2>/dev/null kubectl delete pods -lkubernetes.io/name=KubeDNS -n kube-system;
+    2>/dev/null 2>/dev/null kubectl delete pods -lkubernetes.io/name=KubeDNS -n kube-system;
 }
 
 killCoreDNSPods() {
