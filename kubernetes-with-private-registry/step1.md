@@ -12,7 +12,7 @@ The Docker registry `registry.workshop.breda.local`{{copy}} is reachable from bo
   ```{{execute}}
 - **Run it in the cluster**
   ```
-  kubectl run nginx-test --image=registry.workshop.breda.local/my-nginx-image
+  kubectl run nginx-test -lapp.kubernetes.io/part-of=example-3tier-app --image=registry.workshop.breda.local/my-nginx-image
   kubectl expose deployment nginx-test --type=NodePort --port=30099 --target-port=80
   kubectl patch svc nginx-test --type='json' -p '[{"op":"replace","path":"/spec/ports/0/nodePort","value":30099}]'
   ```{{execute}}
