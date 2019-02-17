@@ -162,6 +162,7 @@ case "$(hostname)" in
         installKail
         waitForDockerRegistryLocal
         waitForKubernetes
+        echo '$ kail -lapp.kubernetes.io/part-of=example-3tier-app'
         kail -lapp.kubernetes.io/part-of=example-3tier-app
     ;;
 esac
