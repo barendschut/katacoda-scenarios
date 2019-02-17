@@ -22,6 +22,10 @@
         {
           "file": "k8s_workshop_breda",
           "target": "~/.ssh/"
+        },
+        {
+          "file": "tiny-ci",
+          "target": "/usr/local/bin/tiny-ci"
         }
       ]
     }
