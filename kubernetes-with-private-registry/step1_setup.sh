@@ -239,6 +239,7 @@ case "$(hostname)" in
         waitForDockerRegistryLocal
         waitForKubernetes
         clear
+        echo '# log output from your apps will appear below'
         echo 'node01 $ stern ""'
         stern ""
     ;;
