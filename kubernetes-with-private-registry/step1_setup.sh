@@ -23,6 +23,9 @@ waitForDockerUpgrade() {
             sleep 1;
         done;
         2>&1 cat /opt/upgrade-docker || true;
+        until 2>&1 docker version; do
+            sleep 1;
+        done;
     ) | stdin-spinner;
     echo "[$(simple_date)] done"
 }
@@ -144,12 +147,16 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7HCf/bOWHHV73rYHrP89vnPQJNkHitUo72jwuVyYg
 }
 
 runDockerRegistry() {
-    docker run -d -p 443:5000 \
-        -v /root/.certs:/certs \
-        -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/$REGISTRY_DOMAIN.crt \
-        -e REGISTRY_HTTP_TLS_KEY=/certs/$REGISTRY_DOMAIN.key \
-        -v /opt/registry/data:/var/lib/registry \
-        --name registry registry:2;
+    echo "[$(simple_date)] Starting Docker registry... (~3 sec)"
+    (
+        2>&1 docker run -d -p 443:5000 \
+            -v /root/.certs:/certs \
+            -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/$REGISTRY_DOMAIN.crt \
+            -e REGISTRY_HTTP_TLS_KEY=/certs/$REGISTRY_DOMAIN.key \
+            -v /opt/registry/data:/var/lib/registry \
+            --name registry registry:2;
+    ) | stdin-spinner
+    echo "[$(simple_date)] done"
 }
 
 case "$(hostname)" in
