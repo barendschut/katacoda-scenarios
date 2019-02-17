@@ -16,6 +16,12 @@ waitForDockerRegistryLocal() {
     echo "[$(simple_date)] done"
 }
 
+waitForDockerUpgrade() {
+    echo "[$(simple_date)] Upgrading docker... (<1 min)"
+    </opt/update-docker stdin-spinner;
+    echo "[$(simple_date)] done"
+}
+
 waitForDockerRegistryRemote() {
     echo "[$(simple_date)] Waiting for Docker registry... (<1 min)"
     until
