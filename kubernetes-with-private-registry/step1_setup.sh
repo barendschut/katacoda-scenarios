@@ -10,7 +10,7 @@ waitForDockerRegistryLocal() {
     until
         >/dev/null 2>/dev/null docker inspect -f '{{.ID}}' registry;
     do
-        sleep 1
+        sleep 0.1
         echo .;
     done | stdin-spinner;
     echo "[$(simple_date)] done"
@@ -21,7 +21,7 @@ waitForNetwork() {
     until
         >/dev/null 2>/dev/null curl  --fail --connect-timeout 1 --head https://github.com/
     do
-        sleep 1
+        sleep 0.1
         echo .;
     done | stdin-spinner;
     echo "[$(simple_date)] done"
