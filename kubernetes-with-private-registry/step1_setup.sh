@@ -149,6 +149,7 @@ installStdinSpinner() {
 configureGit() {
     git config --global user.email "mail@example.com"
     git config --global user.name "name"
+    alias g=git
 }
 
 installSSHKey() {
