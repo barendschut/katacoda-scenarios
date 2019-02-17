@@ -114,7 +114,7 @@ installTools() {
         exec 2>&1
         installKustomize &
         installDockerCompose &
-        installKail &
+        installStern &
         wait
     ) | stdin-spinner;
     echo "[$(simple_date)] done"
@@ -137,6 +137,15 @@ installKail() {
     ) | stdin-spinner
     chmod +x kail
     mv kail /usr/bin/
+    echo "[$(simple_date)] done"
+}
+
+installStern() {
+    echo "[$(simple_date)] Installing stern... (~3 sec)"
+    (
+        curl -kLo /usr/local/bin/stern https://github.com/wercker/stern/releases/download/1.10.0/stern_linux_amd64
+        chmod +x /usr/local/bin/stern;
+    ) | stdin-spinner
     echo "[$(simple_date)] done"
 }
 
@@ -197,13 +206,12 @@ case "$(hostname)" in
     node01)
         clear
         installStdinSpinner
-        installKail
+        installStern
         waitForDockerUpgrade
         runDockerRegistry
         waitForDockerRegistryLocal
         waitForKubernetes
         clear
-        echo '$ kail -lapp.kubernetes.io/part-of=example-3tier-app'
-        kail -lapp.kubernetes.io/part-of=example-3tier-app
+        stern ""
     ;;
 esac
