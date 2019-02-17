@@ -51,7 +51,7 @@ waitForWeave() {
     echo "[$(simple_date)] Waiting for Weave... (~5 sec)"
     (
         until
-            [ "$(kubectl get daemonset -n kube-system weave-net -o jsonpath='{.status.numberReady}')" = "2" ];
+            [ "$(2>&1 kubectl get daemonset -n kube-system weave-net -o jsonpath='{.status.numberReady}')" = "2" ];
         do
             echo .;
             sleep 1;
