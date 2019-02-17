@@ -141,6 +141,15 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7HCf/bOWHHV73rYHrP89vnPQJNkHitUo72jwuVyYg
     "
 }
 
+runDockerRegistry() {
+    docker run -d -p 443:5000 \
+        -v /root/.certs:/certs \
+        -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/$REGISTRY_DOMAIN.crt \
+        -e REGISTRY_HTTP_TLS_KEY=/certs/$REGISTRY_DOMAIN.key \
+        -v /opt/registry/data:/var/lib/registry \
+        --name registry registry:2;
+}
+
 case "$(hostname)" in
     master)
         clear
@@ -160,6 +169,7 @@ case "$(hostname)" in
         installStdinSpinner
         installKail
         waitForDockerUpgrade
+        runDockerRegistry
         waitForDockerRegistryLocal
         waitForKubernetes
         echo '$ kail -lapp.kubernetes.io/part-of=example-3tier-app'
