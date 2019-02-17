@@ -186,6 +186,28 @@ runDockerRegistry() {
     echo "[$(simple_date)] done"
 }
 
+tinyCI() {
+    BRANCH=$(git rev-parse --abbrev-ref HEAD)
+    while true; do
+        (
+            set -x;
+            docker-compose build;
+            docker-compose push;
+            kustomize build ../deployment/base/ | kubectl apply -f -;
+        );
+        echo 'Waiting for changes...';
+        while true; do
+            2>&1 git fetch -v --progress origin;
+            if [ "$(2>&1 git rev-parse HEAD)" != "$(2>&1 git rev-parse origin/"$BRANCH")" ]; then
+                break;
+            fi;
+            echo .;
+            sleep 1;
+        done | stdin-spinner;
+        git reset --hard origin/"$BRANCH";
+    done
+}
+
 case "$(hostname)" in
     master)
         clear
@@ -212,6 +234,7 @@ case "$(hostname)" in
         waitForDockerRegistryLocal
         waitForKubernetes
         clear
+        echo 'node01 $ stern ""'
         stern ""
     ;;
 esac
