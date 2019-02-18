@@ -163,14 +163,14 @@ configureGit() {
         git config --global user.email "mail@example.com"
         git config --global user.name "name"
     ) 2>&1 | stdin-spinner
-    alias g=git
 }
 
 installSSHKey() {
     >/dev/null 2>/dev/null chmod 400 ~/.ssh/k8s_workshop_breda;
     cat >> ~/.bashrc <<EOF
-        >/dev/null 2>/dev/null eval "\$(ssh-agent)"
+        >/dev/null 2>/dev/null eval "\$(ssh-agent)";
         >/dev/null 2>/dev/null ssh-add ~/.ssh/k8s_workshop_breda;
+        alias g=git;
 EOF
     cat <<EOF
 $(simple_date)] SSH public key:
