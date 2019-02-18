@@ -107,7 +107,11 @@ installDockerCompose() {
 
 installStern() {
     (
-        2>&1 curl -Lo /usr/local/bin/stern https://github.com/wercker/stern/releases/download/1.10.0/stern_linux_amd64
+        until
+            2>&1 curl -Lo /usr/local/bin/stern https://github.com/wercker/stern/releases/download/1.10.0/stern_linux_amd64;
+        do
+            sleep 1;
+        done;
         chmod +x /usr/local/bin/stern;
     )
 }
