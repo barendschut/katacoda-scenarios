@@ -165,10 +165,10 @@ case "$(hostname)" in
             killKubeDNSPods
             waitForDockerRegistryRemote
             waitForKubernetes
+            killKubeProxyPods
             deployDashboard
-            # waitForWeave
-            # killKubeProxyPods
-            # killCoreDNSPods
+            waitForWeave
+            killCoreDNSPods
         ) | stdin-spinner
         echo "[$(simple_date)] done"
         printf "\033[?25h"
