@@ -156,7 +156,7 @@ case "$(hostname)" in
     master)
         clear
         installStdinSpinner
-        echo "[$(simple_date)] Setting up..."
+        echo "[$(simple_date)] Setting up... (~2 min)"
         (
             configureGit
             installTools
@@ -177,7 +177,7 @@ case "$(hostname)" in
     node01)
         clear
         installStdinSpinner
-        echo "[$(simple_date)] Setting up..."
+        echo "[$(simple_date)] Setting up... (~2 min)"
         (
             installStern
             waitForDockerUpgrade
