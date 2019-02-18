@@ -6,18 +6,15 @@ REGISTRY_DOMAIN=registry.workshop.breda.local;
 alias simple_date="date +'%H:%M:%S'"
 
 waitForDockerRegistryLocal() {
-    echo "[$(simple_date)] Waiting for Docker registry... (<1 min)"
     until
         >/dev/null 2>/dev/null docker inspect -f '{{.ID}}' registry;
     do
         sleep 0.5;
         echo .;
-    done | stdin-spinner;
-    echo "[$(simple_date)] done"
+    done
 }
 
 waitForDockerUpgrade() {
-    echo "[$(simple_date)] Waiting for Docker upgrade... (<1 min)"
     (
         until [ -e /opt/upgrade-docker ] || [ -e /opt/upgrade-docker-done ]; do
             echo .;
@@ -28,32 +25,26 @@ waitForDockerUpgrade() {
             echo .;
             sleep 0.5;
         done;
-    ) | stdin-spinner;
-    echo "[$(simple_date)] done"
+    )
 }
 
 waitForDockerRegistryRemote() {
-    echo "[$(simple_date)] Waiting for Docker registry... (<1 min)"
     until
         2>&1 curl -sSL https://"$REGISTRY_DOMAIN"/v2/
     do
         sleep 0.5;
-    done | stdin-spinner;
-    echo "[$(simple_date)] done"
+    done;
 }
 
 waitForKubernetes() {
-    echo "[$(simple_date)] Waiting for Kubernetes... (~5 sec)"
     until
         2>&1 kubectl version;
     do
         sleep 1;
-    done | stdin-spinner;
-    echo "[$(simple_date)] done"
+    done
 }
 
 waitForWeave() {
-    echo "[$(simple_date)] Waiting for Weave... (~5 sec)"
     (
         until
             [ "$(2>&1 kubectl get daemonset -n kube-system weave-net -o jsonpath='{.status.numberReady}')" = "2" ];
@@ -61,12 +52,10 @@ waitForWeave() {
             echo .;
             sleep 1;
         done;
-    ) | stdin-spinner
-    echo "[$(simple_date)] done"
+    )
 }
 
 killKubeProxyPods() {
-    echo "[$(simple_date)] Restarting kube-proxy... (~2 sec)"
     (
         2>&1 kubectl delete pods -lk8s-app=kube-proxy -n kube-system;
         until
@@ -75,8 +64,7 @@ killKubeProxyPods() {
             echo .;
             sleep 1;
         done;
-    ) | stdin-spinner
-    echo "[$(simple_date)] done"
+    )
 }
 
 killKubeDNSPods() {
@@ -84,42 +72,27 @@ killKubeDNSPods() {
 }
 
 killCoreDNSPods() {
-    echo "[$(simple_date)] Restarting coredns... (~2 sec)"
     (
         2>&1 kubectl delete pods -lk8s-app=coredns -n kube-system;
         2>&1 kubectl -v999 wait deployments/coredns -n kube-system --for condition=Available;
-    ) | stdin-spinner
-    echo "[$(simple_date)] done"
-}
-
-deployMetricsServer() {
-    echo "[$(simple_date)] Deploying metrics-server... (~3 sec)"
-    (
-        2>&1 git clone --single-branch --depth=1 https://github.com/kubernetes-incubator/metrics-server
-        2>&1 kubectl -v999 create -f metrics-server/deploy/1.8+/
-    ) | stdin-spinner
-    echo "[$(simple_date)] done"
+    )
 }
 
 deployDashboard() {
-    echo "[$(simple_date)] Deploying Kubernetes dashboard... (~3 sec)"
     (
         2>&1 kubectl apply -f https://gist.github.com/sgreben/bd04d51eb2f683091ba62d7389a564a8/raw//;
         2>&1 kubectl -v999 wait deployments/kubernetes-dashboard -n kube-system --for condition=Available;
-    ) | stdin-spinner
-    echo "[$(simple_date)] done"
+    )
 }
 
 installTools() {
-    echo "[$(simple_date)] Installing tools... (~15 sec)"
     (
         exec 2>&1
         installKustomize &
         installDockerCompose &
         installStern &
         wait
-    ) | stdin-spinner;
-    echo "[$(simple_date)] done"
+    )
 }
 
 installKustomize() {
@@ -132,23 +105,11 @@ installDockerCompose() {
     chmod +x /usr/local/bin/docker-compose;
 }
 
-installKail() {
-    echo "[$(simple_date)] Installing kail... (~3 sec)"
-    (
-        curl -ksSL https://github.com/boz/kail/releases/download/v0.7.0/kail_0.7.0_linux_amd64.tar.gz | tar xvz 2>&1
-    ) | stdin-spinner
-    chmod +x kail
-    mv kail /usr/bin/
-    echo "[$(simple_date)] done"
-}
-
 installStern() {
-    echo "[$(simple_date)] Installing stern... (~3 sec)"
     (
         2>&1 curl -Lo /usr/local/bin/stern https://github.com/wercker/stern/releases/download/1.10.0/stern_linux_amd64
         chmod +x /usr/local/bin/stern;
-    ) | stdin-spinner
-    echo "[$(simple_date)] done"
+    )
 }
 
 installStdinSpinner() {
@@ -162,7 +123,7 @@ configureGit() {
         ssh-keyscan github.com >> ~/.ssh/known_hosts
         git config --global user.email "mail@example.com"
         git config --global user.name "name"
-    ) 2>&1 | stdin-spinner
+    ) 2>&1
 }
 
 installSSHKey() {
@@ -181,7 +142,6 @@ EOF
 }
 
 runDockerRegistry() {
-    echo "[$(simple_date)] Starting Docker registry... (~3 sec)"
     (
         2>&1 docker run -d -p 443:5000 \
             -v /root/.certs:/certs \
@@ -189,25 +149,27 @@ runDockerRegistry() {
             -e REGISTRY_HTTP_TLS_KEY=/certs/$REGISTRY_DOMAIN.key \
             -v /opt/registry/data:/var/lib/registry \
             --name registry registry:2;
-    ) | stdin-spinner
-    echo "[$(simple_date)] done"
+    )
 }
 
 case "$(hostname)" in
     master)
         clear
         installStdinSpinner
-        configureGit
-        installTools
-        waitForDockerUpgrade
-        killKubeDNSPods
-        waitForDockerRegistryRemote
-        waitForKubernetes
-        deployDashboard
-        waitForWeave
-        killKubeProxyPods
-        killCoreDNSPods
-        clear
+        echo "[$(simple_date)] Setting up..."
+        (
+            configureGit
+            installTools
+            waitForDockerUpgrade
+            killKubeDNSPods
+            waitForDockerRegistryRemote
+            waitForKubernetes
+            deployDashboard
+            waitForWeave
+            killKubeProxyPods
+            killCoreDNSPods
+        ) | stdin-spinner
+        echo "[$(simple_date)] done"
         installSSHKey
         chmod +x /usr/local/bin/tiny-cd
         bash
@@ -215,12 +177,15 @@ case "$(hostname)" in
     node01)
         clear
         installStdinSpinner
-        installStern
-        waitForDockerUpgrade
-        runDockerRegistry
-        waitForDockerRegistryLocal
-        waitForKubernetes
-        clear
+        echo "[$(simple_date)] Setting up..."
+        (
+            installStern
+            waitForDockerUpgrade
+            runDockerRegistry
+            waitForDockerRegistryLocal
+            waitForKubernetes
+        ) | stdin-spinner
+        echo "[$(simple_date)] done"
         echo '# log output from your apps will appear below'
         echo 'node01 $ stern ""'
         stern ""
