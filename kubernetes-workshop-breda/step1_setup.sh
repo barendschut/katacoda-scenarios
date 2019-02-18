@@ -188,7 +188,6 @@ case "$(hostname)" in
         echo "[$(simple_date)] done"
         printf "\033[?25h"
         configureSSH
-        chmod +x /usr/local/bin/tiny-cd
         bash
     ;;
     node01)

@@ -26,3 +26,5 @@ The Docker registry `registry.workshop.breda.local`{{copy}} is reachable from bo
 - [App (Web) on NodePort 30001](https://[[HOST_SUBDOMAIN]]-30001-[[KATACODA_HOST]].environments.katacoda.com/)
 
 - [App (API) on NodePort 30002](https://[[HOST_SUBDOMAIN]]-30002-[[KATACODA_HOST]].environments.katacoda.com/)
+
+- [App (DB) on NodePort 30081](https://[[HOST_SUBDOMAIN]]-30081-[[KATACODA_HOST]].environments.katacoda.com/)
