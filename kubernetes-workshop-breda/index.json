@@ -1,5 +1,5 @@
 {
-  "title": "Kubernetes Workshop Sandbox",
+  "title": "Kubernetes Workshop @ codecentric",
   "description": "A 2-node Kubernetes cluster with a private Docker registry",
   "details": {
     "steps": [
