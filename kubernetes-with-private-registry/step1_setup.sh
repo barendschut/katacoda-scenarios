@@ -166,9 +166,9 @@ case "$(hostname)" in
             waitForDockerRegistryRemote
             waitForKubernetes
             deployDashboard
-            waitForWeave
-            killKubeProxyPods
-            killCoreDNSPods
+            # waitForWeave
+            # killKubeProxyPods
+            # killCoreDNSPods
         ) | stdin-spinner
         echo "[$(simple_date)] done"
         printf "\033[?25h"
@@ -180,7 +180,7 @@ case "$(hostname)" in
         clear
         printf "\033[?25l"
         installStdinSpinner
-        echo "[$(simple_date)] Setting up... (~2 min)"
+        echo "[$(simple_date)] Setting up... (~1 min)"
         (
             installStern
             waitForDockerUpgrade
