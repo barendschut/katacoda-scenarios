@@ -1,5 +1,5 @@
 {
-  "title": "Kubernetes Sandbox",
+  "title": "Kubernetes Workshop Sandbox",
   "description": "A 2-node Kubernetes cluster with a private Docker registry",
   "details": {
     "steps": [
