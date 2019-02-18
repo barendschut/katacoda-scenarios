@@ -169,7 +169,7 @@ configureGit() {
 installSSHKey() {
     >/dev/null 2>/dev/null chmod 400 ~/.ssh/k8s_workshop_breda;
     cat >> ~/.bashrc <<EOF
-        >/dev/null 2>/dev/null eval "$(ssh-agent)"
+        >/dev/null 2>/dev/null eval "\$(ssh-agent)"
         >/dev/null 2>/dev/null ssh-add ~/.ssh/k8s_workshop_breda;
 EOF
     . ~/.bashrc
