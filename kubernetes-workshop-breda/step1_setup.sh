@@ -7,7 +7,7 @@ alias simple_date="date +'%H:%M:%S'"
 
 waitForDockerRegistryLocal() {
     until
-        >/dev/null 2>/dev/null docker inspect -f '{{.ID}}' registry;
+        2>&1 docker inspect -f '{{.ID}}' registry;
     do
         sleep 0.5;
         echo .;
@@ -38,9 +38,9 @@ waitForDockerRegistryRemote() {
 
 waitForKubernetes() {
     until
-        2>&1 kubectl version;
+        2>&1 kubectl -v999 --request-timeout=1s version;
     do
-        sleep 1;
+        sleep 0.5;
     done
 }
 
@@ -50,37 +50,37 @@ waitForWeave() {
             [ "$(2>&1 kubectl get daemonset -n kube-system weave-net -o jsonpath='{.status.numberReady}')" = "2" ];
         do
             echo .;
-            sleep 1;
+            sleep 0.5;
         done;
     )
 }
 
 killKubeProxyPods() {
     (
-        2>&1 kubectl delete pods -lk8s-app=kube-proxy -n kube-system;
+        2>&1 kubectl -v999 delete pods -lk8s-app=kube-proxy -n kube-system;
         until
             [ "$(kubectl get daemonset -n kube-system kube-proxy -o jsonpath='{.status.numberReady}')" = "2" ];
         do
             echo .;
-            sleep 1;
+            sleep 0.5;
         done;
     )
 }
 
 killKubeDNSPods() {
-    >/dev/null 2>/dev/null kubectl delete pods -lkubernetes.io/name=KubeDNS -n kube-system;
+    2>&1 kubectl -v999 delete pods -lkubernetes.io/name=KubeDNS -n kube-system;
 }
 
 killCoreDNSPods() {
     (
-        2>&1 kubectl delete pods -lk8s-app=coredns -n kube-system;
+        2>&1 kubectl -v999 delete pods -lk8s-app=coredns -n kube-system;
         2>&1 kubectl -v999 wait deployments/coredns -n kube-system --for condition=Available;
     )
 }
 
 deployDashboard() {
     (
-        2>&1 kubectl apply -f https://gist.github.com/sgreben/bd04d51eb2f683091ba62d7389a564a8/raw//;
+        2>&1 kubectl -v999 apply -f https://gist.github.com/sgreben/bd04d51eb2f683091ba62d7389a564a8/raw//;
         2>&1 kubectl -v999 wait deployments/kubernetes-dashboard -n kube-system --for condition=Available;
     )
 }
@@ -99,7 +99,7 @@ installKustomize() {
     until
         2>&1 curl -kLo /usr/local/bin/kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v2.0.1/kustomize_2.0.1_linux_amd64;
     do
-        sleep 1;
+        sleep 0.5;
     done;
     chmod +x /usr/local/bin/kustomize;
 }
@@ -108,7 +108,7 @@ installDockerCompose() {
     until
         2>&1 curl -kLo /usr/local/bin/docker-compose https://github.com/docker/compose/releases/download/1.24.0-rc1/docker-compose-"$(uname -s)"-"$(uname -m)";
     do
-        sleep 1;
+        sleep 0.5;
     done;
     chmod +x /usr/local/bin/docker-compose;
 }
@@ -118,7 +118,7 @@ installStern() {
         until
             2>&1 curl --fail -Lo /usr/local/bin/stern https://github.com/wercker/stern/releases/download/1.10.0/stern_linux_amd64;
         do
-            sleep 1;
+            sleep 0.5;
         done;
         chmod +x /usr/local/bin/stern;
     )
@@ -128,7 +128,7 @@ installStdinSpinner() {
     until
         2>/dev/null curl --fail -ksSL https://github.com/sgreben/stdin-spinner/releases/download/1.0.4/stdin-spinner_1.0.4_linux_x86_64.tar.gz | tar xz;
     do
-        sleep 1;
+        sleep 0.5;
     done;
     chmod +x stdin-spinner
     mv stdin-spinner /usr/bin/
