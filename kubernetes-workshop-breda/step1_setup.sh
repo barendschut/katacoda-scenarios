@@ -45,7 +45,7 @@ waitForKubernetes() {
 
 waitForWeave() {
     (
-        2>&1 kubectl -v999 apply -f https://git.io/weave-kube
+        # 2>&1 kubectl -v999 apply -f https://git.io/weave-kube
         until
             [ "$(2>&1 kubectl get daemonset -n kube-system weave-net -o jsonpath='{.status.numberReady}')" = "2" ];
         do
