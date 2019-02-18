@@ -172,7 +172,6 @@ installSSHKey() {
         >/dev/null 2>/dev/null eval "\$(ssh-agent)"
         >/dev/null 2>/dev/null ssh-add ~/.ssh/k8s_workshop_breda;
 EOF
-    . ~/.bashrc
     cat <<EOF
 $(simple_date)] SSH public key:
 
@@ -210,7 +209,8 @@ case "$(hostname)" in
         killCoreDNSPods
         clear
         installSSHKey
-        chmod +x /usr/local/bin/tiny-ci
+        chmod +x /usr/local/bin/tiny-cd
+        bash
     ;;
     node01)
         clear
