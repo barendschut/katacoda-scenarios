@@ -5,8 +5,8 @@
     "steps": [
       {
         "title": "Environment info",
-        "text": "step1.md",
-        "code": "step1_setup.sh"
+        "code": "step1_setup.sh",
+        "text": "step1.md"
       }
     ],
     "intro": {
