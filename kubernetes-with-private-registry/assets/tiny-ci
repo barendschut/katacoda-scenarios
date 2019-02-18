@@ -8,9 +8,13 @@ watchAndBuild() {
         (
             cd "$(dirname "$line")";
             set -x;
+            TAG="$(git rev-parse HEAD)"
+            export APP_VERSION="$TAG"
             docker-compose build;
             docker-compose push;
-            kustomize build ../deployment/base/ | kubectl apply -f -;
+            cd ../deployment/base/;
+            kustomize edit set image '*'=:"$TAG";
+            kustomize build | kubectl apply -f -;
         );
         done;
         echo "Polling for changes to $(git remote get-url origin)...";
