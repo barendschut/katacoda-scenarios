@@ -1,6 +1,8 @@
 {
   "title": "Kubernetes Workshop @ codecentric",
   "description": "A 2-node Kubernetes cluster with a private Docker registry",
+  "difficulty": "Intermediate",
+  "time": "1.5h",
   "details": {
     "steps": [
       {
