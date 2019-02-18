@@ -171,9 +171,11 @@ case "$(hostname)" in
     master)
         clear
         printf "\033[?25l"
+        installStdinSpinner
         echo "[$(simple_date)] Setting up... (~2 min)"
         (
             configureGit
+            installTools
             waitForDockerUpgrade
             killKubeDNSPods
             waitForDockerRegistryRemote
@@ -186,13 +188,16 @@ case "$(hostname)" in
         echo "[$(simple_date)] done"
         printf "\033[?25h"
         configureSSH
+        chmod +x /usr/local/bin/tiny-cd
         bash
     ;;
     node01)
         clear
         printf "\033[?25l"
+        installStdinSpinner
         echo "[$(simple_date)] Setting up... (~1 min)"
         (
+            installStern
             waitForDockerUpgrade
             runDockerRegistry
             waitForDockerRegistryLocal

@@ -29,26 +29,6 @@
           "file": "tiny-cd",
           "target": "/usr/local/bin/",
           "chmod": "+x"
-        },
-        {
-          "file": "stern",
-          "target": "/usr/local/bin/",
-          "chmod": "+x"
-        },
-        {
-          "file": "stdin-spinner",
-          "target": "/usr/local/bin/",
-          "chmod": "+x"
-        },
-        {
-          "file": "docker-compose",
-          "target": "/usr/local/bin/",
-          "chmod": "+x"
-        },
-        {
-          "file": "kustomize",
-          "target": "/usr/local/bin/",
-          "chmod": "+x"
         }
       ]
     }
