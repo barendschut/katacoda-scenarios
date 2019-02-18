@@ -17,8 +17,7 @@ waitForDockerRegistryLocal() {
 waitForDockerUpgrade() {
     (
         until [ -e /opt/upgrade-docker ] || [ -e /opt/upgrade-docker-done ]; do
-            echo .;
-            sleep 0.5;
+            sleep 1;
         done;
         2>&1 cat /opt/upgrade-docker || true;
         until 2>&1 docker version; do
@@ -30,7 +29,7 @@ waitForDockerUpgrade() {
 
 waitForDockerRegistryRemote() {
     until
-        2>&1 curl -sSL https://"$REGISTRY_DOMAIN"/v2/
+        2>&1 curl --fail -L https://"$REGISTRY_DOMAIN"/v2/
     do
         sleep 0.5;
     done;
@@ -97,7 +96,7 @@ installTools() {
 
 installKustomize() {
     until
-        2>&1 curl -kLo /usr/local/bin/kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v2.0.1/kustomize_2.0.1_linux_amd64;
+        2>&1 curl --fail -kLo /usr/local/bin/kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v2.0.1/kustomize_2.0.1_linux_amd64;
     do
         sleep 0.5;
     done;
@@ -106,7 +105,7 @@ installKustomize() {
 
 installDockerCompose() {
     until
-        2>&1 curl -kLo /usr/local/bin/docker-compose https://github.com/docker/compose/releases/download/1.24.0-rc1/docker-compose-"$(uname -s)"-"$(uname -m)";
+        2>&1 curl --fail -kLo /usr/local/bin/docker-compose https://github.com/docker/compose/releases/download/1.24.0-rc1/docker-compose-"$(uname -s)"-"$(uname -m)";
     do
         sleep 0.5;
     done;
