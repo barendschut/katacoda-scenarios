@@ -96,19 +96,27 @@ installTools() {
 }
 
 installKustomize() {
-    curl -kLo /usr/local/bin/kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v2.0.1/kustomize_2.0.1_linux_amd64;
+    until
+        2>&1 curl -kLo /usr/local/bin/kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v2.0.1/kustomize_2.0.1_linux_amd64;
+    do
+        sleep 1;
+    done;
     chmod +x /usr/local/bin/kustomize;
 }
 
 installDockerCompose() {
-    curl -kLo /usr/local/bin/docker-compose https://github.com/docker/compose/releases/download/1.24.0-rc1/docker-compose-"$(uname -s)"-"$(uname -m)";
+    until
+        2>&1 curl -kLo /usr/local/bin/docker-compose https://github.com/docker/compose/releases/download/1.24.0-rc1/docker-compose-"$(uname -s)"-"$(uname -m)";
+    do
+        sleep 1;
+    done;
     chmod +x /usr/local/bin/docker-compose;
 }
 
 installStern() {
     (
         until
-            2>&1 curl -Lo /usr/local/bin/stern https://github.com/wercker/stern/releases/download/1.10.0/stern_linux_amd64;
+            2>&1 curl --fail -Lo /usr/local/bin/stern https://github.com/wercker/stern/releases/download/1.10.0/stern_linux_amd64;
         do
             sleep 1;
         done;
@@ -117,7 +125,11 @@ installStern() {
 }
 
 installStdinSpinner() {
-    2>/dev/null curl -ksSL https://github.com/sgreben/stdin-spinner/releases/download/1.0.4/stdin-spinner_1.0.4_linux_x86_64.tar.gz | tar xz
+    until
+        2>/dev/null curl --fail -ksSL https://github.com/sgreben/stdin-spinner/releases/download/1.0.4/stdin-spinner_1.0.4_linux_x86_64.tar.gz | tar xz;
+    do
+        sleep 1;
+    done;
     chmod +x stdin-spinner
     mv stdin-spinner /usr/bin/
 }
@@ -130,7 +142,7 @@ configureGit() {
     ) 2>&1
 }
 
-installSSHKey() {
+configureSSH() {
     >/dev/null 2>/dev/null chmod 400 ~/.ssh/k8s_workshop_breda;
     cat >> ~/.bashrc <<EOF
         >/dev/null 2>/dev/null eval "\$(ssh-agent)";
@@ -176,7 +188,7 @@ case "$(hostname)" in
         ) | stdin-spinner
         echo "[$(simple_date)] done"
         printf "\033[?25h"
-        installSSHKey
+        configureSSH
         chmod +x /usr/local/bin/tiny-cd
         bash
     ;;
