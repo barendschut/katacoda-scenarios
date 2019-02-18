@@ -155,6 +155,7 @@ runDockerRegistry() {
 case "$(hostname)" in
     master)
         clear
+        printf "\033[?25l"
         installStdinSpinner
         echo "[$(simple_date)] Setting up... (~2 min)"
         (
@@ -170,12 +171,14 @@ case "$(hostname)" in
             killCoreDNSPods
         ) | stdin-spinner
         echo "[$(simple_date)] done"
+        printf "\033[?25h"
         installSSHKey
         chmod +x /usr/local/bin/tiny-cd
         bash
     ;;
     node01)
         clear
+        printf "\033[?25l"
         installStdinSpinner
         echo "[$(simple_date)] Setting up... (~2 min)"
         (
@@ -186,6 +189,7 @@ case "$(hostname)" in
             waitForKubernetes
         ) | stdin-spinner
         echo "[$(simple_date)] done"
+        printf "\033[?25h"
         echo '# log output from your apps will appear below'
         echo 'node01 $ stern ""'
         stern ""
