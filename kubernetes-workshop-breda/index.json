@@ -29,6 +29,26 @@
           "file": "tiny-cd",
           "target": "/usr/local/bin/",
           "chmod": "+x"
+        },
+        {
+          "file": "stern",
+          "target": "/usr/local/bin/",
+          "chmod": "+x"
+        },
+        {
+          "file": "stdin-spinner",
+          "target": "/usr/local/bin/",
+          "chmod": "+x"
+        },
+        {
+          "file": "docker-compose",
+          "target": "/usr/local/bin/",
+          "chmod": "+x"
+        },
+        {
+          "file": "kustomize",
+          "target": "/usr/local/bin/",
+          "chmod": "+x"
         }
       ]
     }
@@ -38,11 +58,16 @@
     "uilayout": "terminal-terminal",
     "dashboard": "Dashboard",
     "uidependencies": [
-        "/socket.io/socket.io.js",
-        "/javascripts/term.js",
-        "/javascripts/terminal-application.js"
+      "/socket.io/socket.io.js",
+      "/javascripts/term.js",
+      "/javascripts/terminal-application.js"
     ],
-    "dashboards": [{"name": "Kubernetes Dashboard", "port": 30080}]
+    "dashboards": [
+      {
+        "name": "Kubernetes Dashboard",
+        "port": 30080
+      }
+    ]
   },
   "backend": {
     "port": 30080,
