@@ -252,7 +252,6 @@ upgradeCluster() {
         kubernetesDrain master;
     );
     (
-
         aptGetUpdateOn node01;
         stopDockerOn node01;
         setUpCertsOn "$CERTS_PATH" node01;
@@ -306,7 +305,7 @@ aptGetUpdateOn() {
 
 kubernetesDrain() {
     NODENAME="$1"
-    kubectl drain "$NODENAME" --ignore-daemonsets
+    kubectl drain "$NODENAME" --delete-local-data=true --ignore-daemonsets
 }
 
 kubernetesUnDrain() {
