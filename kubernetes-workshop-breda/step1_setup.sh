@@ -227,15 +227,6 @@ upgradeCluster() {
     kubectl delete pods -n kube-system -lname=weave-net;
     kubectl wait --for condition=Ready node/master
     upgradeKubernetesTo v1.12.1;
-    #upgradeKubernetesTo v1.13.3;
-    (
-        generateCertsIn "$CERTS_PATH" &
-        (
-            kubernetesDrain node01;
-            kubernetesDrain master;
-        ) &
-        wait;
-    );
     (
         aptGetUpdateOn node01;
         stopDockerOn node01;
@@ -254,6 +245,7 @@ upgradeCluster() {
     waitForKubernetes;
     kubernetesUnDrain master;
     kubernetesUnDrain node01;
+    upgradeKubernetesTo v1.13.3;
 }
 
 upgradeKubernetesTo() {
@@ -265,6 +257,7 @@ upgradeKubernetesTo() {
     upgradeKubeletOn node01;
     upgradeKubectlOn node01;
     upgradeKubectlOn master;
+    waitForKubernetes;
     kubernetesUnDrain node01;
     kubernetesUnDrain master;
 }
