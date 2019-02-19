@@ -248,6 +248,8 @@ upgradeCluster() {
     kubectl -v1 apply -f https://git.io/weave-kube;
     generateCertsIn "$CERTS_PATH";
     (
+
+        aptGetUpdateOn node01;
         kubernetesDrain node01;
         stopDockerOn node01;
         setUpCertsOn "$CERTS_PATH" node01;
@@ -255,6 +257,7 @@ upgradeCluster() {
         kubernetesUnDrain node01;
     ) &
     (
+        aptGetUpdateOn localhost;
         kubernetesDrain master;
         stopDockerOn localhost;
         setUpCertsOn "$CERTS_PATH" localhost;
