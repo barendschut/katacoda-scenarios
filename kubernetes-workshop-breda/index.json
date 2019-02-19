@@ -29,8 +29,8 @@
     }
   },
   "environment": {
-    "showdashboard": true,
     "icon": "fa-kubernetes",
+    "showdashboard": true,
     "uilayout": "terminal-terminal",
     "dashboard": "Dashboard",
     "uidependencies": [
