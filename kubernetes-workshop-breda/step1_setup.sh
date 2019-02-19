@@ -181,13 +181,12 @@ hideCursor() { printf "\033[?25l"; }
 restoreCursor() { printf "\033[?25h"; }
 
 main () {
-    clear;
-    hideCursor;
-    installStdinSpinner;
-
     case "$(hostname)" in
         master)
+            clear;
             echo "[$(simple_date)] Setting up... (~2 min)"
+            hideCursor;
+            installStdinSpinner;
             (
                 configureGit;
                 installTools;
@@ -207,6 +206,9 @@ main () {
             bash
         ;;
         node01)
+            clear;
+            hideCursor;
+            installStdinSpinner;
             echo "[$(simple_date)] Setting up... (~1 min)"
             (
                 installStern;
