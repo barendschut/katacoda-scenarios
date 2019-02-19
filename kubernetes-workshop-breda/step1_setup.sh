@@ -15,7 +15,7 @@ CERTS_PATH=~/.certs.src;
 
 alias simple_date="date +'%H:%M:%S'"
 
-sloppy_ssh() {
+2>&1 sloppy_ssh() {
     /usr/bin/ssh -oBatchMode=yes -o TCPKeepAlive=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=30 -o ConnectTimeout=30 -o ConnectionAttempts=30 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=error "$@";
 }
 
@@ -199,23 +199,18 @@ main() {
             hideCursor;
             installStdinSpinner;
             (
-                true &
-                (
-                    exec 2>&1;
-                    configureGit;
-                    installTools;
-                    upgradeCluster;
-                    waitForKubernetes;
-                    deployDashboard;
-                    deployIngressController;
-                    waitForDockerRegistryRemote;
-                ) &
-                wait;
+                configureGit;
+                installTools;
+                upgradeCluster;
+                waitForKubernetes;
+                deployDashboard;
+                deployIngressController;
+                waitForDockerRegistryRemote;
             ) | stdin-spinner
             echo "[$(simple_date)] done"
-            restoreCursor
-            configureSSH
-            bash
+            restoreCursor;
+            configureSSH;
+            bash;
         ;;
         node01)
             clear;
@@ -223,16 +218,11 @@ main() {
             installStdinSpinner;
             echo "[$(simple_date)] Setting up... (~1 min)"
             (
-                true &
-                (
-                    exec 2>&1;
-                    installStern;
-                    waitForDockerUpgrade;
-                    runDockerRegistry;
-                    waitForDockerRegistryLocal;
-                    waitForKubernetes;
-                ) &
-                wait;
+                installStern;
+                waitForDockerUpgrade;
+                runDockerRegistry;
+                waitForDockerRegistryLocal;
+                waitForKubernetes;
             ) | stdin-spinner
             echo "[$(simple_date)] done"
             restoreCursor;
@@ -244,6 +234,7 @@ main() {
 }
 
 upgradeCluster() {
+    exec 2>&1;
     killKubeDNSPods;
     setUpRegistryEtcHostsOn node01;
     setUpRegistryEtcHostsOn localhost;
@@ -293,7 +284,7 @@ upgradeKubernetesTo() {
 
 aptGetUpdateOn() {
     HOST="$1"
-    sloppy_ssh root@"$HOST" "
+    2>&1 sloppy_ssh root@"$HOST" "
         export DEBIAN_FRONTEND=noninteractive;
         apt-get -y update;
     ";
@@ -320,7 +311,7 @@ upgradeKubeadm() {
 upgradeKubeletOn() {
     HOST="$1";
 
-    sloppy_ssh root@"$HOST" "
+    2>&1 sloppy_ssh root@"$HOST" "
         export DEBIAN_FRONTEND=noninteractive;
         apt-get install --no-install-recommends -y kubelet kubeadm;
     ";
@@ -329,7 +320,7 @@ upgradeKubeletOn() {
 upgradeKubeletConfigOn() {
     HOST="$1";
 
-    sloppy_ssh root@"$HOST" "
+    2>&1 sloppy_ssh root@"$HOST" "
         kubeadm upgrade node config --kubelet-version=\"$(kubelet --version | cut -d ' ' -f 2)\";
         systemctl restart kubelet;
     ";
@@ -337,14 +328,14 @@ upgradeKubeletConfigOn() {
 
 stopDockerOn() {
     HOST="$1"
-    sloppy_ssh root@"$HOST" "
+    2>&1 sloppy_ssh root@"$HOST" "
         service docker stop;
     ";
 }
 
 startDockerOn() {
     HOST="$1"
-    sloppy_ssh root@"$HOST" "
+    2>&1 sloppy_ssh root@"$HOST" "
         systemctl daemon-reload;
         service docker start;
     ";
@@ -353,17 +344,17 @@ startDockerOn() {
 upgradeDockerOn() {
     HOST="$1";
 
-    sloppy_ssh root@"$HOST" "
+    2>&1 sloppy_ssh root@"$HOST" "
         mkdir -p /etc/systemd/system/docker.service.d;
     ";
-    sloppy_ssh root@"$HOST" "
+    2>&1 sloppy_ssh root@"$HOST" "
         cat > /etc/systemd/system/docker.service.d/docker.conf;
     " <<EOF
 [Service]
 ExecStart=
 ExecStart=/usr/bin/dockerd
 EOF
-    sloppy_ssh root@"$HOST" "
+    2>&1 sloppy_ssh root@"$HOST" "
         export DEBIAN_FRONTEND=noninteractive;
         apt-get install --no-install-recommends -y docker.io;
         touch /opt/upgrade-docker-done;
@@ -379,7 +370,7 @@ copyKubeconfigTo() {
     until [ -f /root/.kube/config ]; do
         sleep 1;
     done;
-    sloppy_ssh root@"$HOST" "
+    2>&1 sloppy_ssh root@"$HOST" "
         mkdir -p /root/.kube/;
     ";
     sloppy_scp /root/.kube/config root@"$HOST":/root/.kube/
@@ -387,14 +378,14 @@ copyKubeconfigTo() {
 
 setUpRegistryEtcHostsOn() {
     HOST="$1";
-    sloppy_ssh root@"$HOST" "
+    2>&1 sloppy_ssh root@"$HOST" "
         echo '${REGISTRY_IP}' '${REGISTRY_DOMAIN}' >> /etc/hosts
     "
 }
 
 setUpMasterEtcHostsOn() {
     HOST="$1";
-    sloppy_ssh root@"$HOST" "
+    2>&1 sloppy_ssh root@"$HOST" "
         echo '${MASTER_IP}' master >> /etc/hosts
     "
 }
@@ -427,7 +418,7 @@ setUpCertsOn() {
     export REGISTRY_DOMAIN;
     CERTS_PATH="$1";
     HOST="$2";
-    sloppy_ssh root@"$HOST" "
+    2>&1 sloppy_ssh root@"$HOST" "
         mkdir -p /root/.certs;
         mkdir -p /usr/local/share/ca-certificates/${REGISTRY_DOMAIN};
         mkdir -p /etc/docker/certs.d/${REGISTRY_DOMAIN};
@@ -435,7 +426,7 @@ setUpCertsOn() {
     sloppy_scp "$CERTS_PATH"/rootCA.crt root@"$HOST":/usr/local/share/ca-certificates/${REGISTRY_DOMAIN};
     sloppy_scp "$CERTS_PATH"/rootCA.crt root@"$HOST":/etc/docker/certs.d/${REGISTRY_DOMAIN}/ca.crt;
     sloppy_scp -r "$CERTS_PATH"/* root@"$HOST":/root/.certs/;
-    sloppy_ssh root@"$HOST" "
+    2>&1 sloppy_ssh root@"$HOST" "
         update-ca-certificates;
     ";
 }
