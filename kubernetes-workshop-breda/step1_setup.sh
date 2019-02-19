@@ -243,8 +243,8 @@ upgradeCluster() {
     setUpRegistryEtcHostsOn localhost;
     setUpMasterEtcHostsOn node01;
     copyKubeconfigTo node01;
-    upgradeKubernetesTo v1.12.1;
-    upgradeKubernetesTo v1.13.3;
+    #upgradeKubernetesTo v1.12.1;
+    #upgradeKubernetesTo v1.13.3;
     kubectl -v9 apply -f https://git.io/weave-kube;
     generateCertsIn "$CERTS_PATH";
     (
