@@ -152,7 +152,7 @@ EOF
 
 runDockerRegistry() {
     (
-        2>&1 docker run -d -p 443:5000 \
+        2>&1 docker run --restart=always -d -p 443:5000 \
             -v /root/.certs:/certs \
             -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/$REGISTRY_DOMAIN.crt \
             -e REGISTRY_HTTP_TLS_KEY=/certs/$REGISTRY_DOMAIN.key \
