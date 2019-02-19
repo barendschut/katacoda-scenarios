@@ -181,17 +181,16 @@ main () {
             hideCursor;
             installStdinSpinner;
             (
-                cat /opt/setup.out &
+                true &
                 (
                     configureGit;
                     installTools;
                     waitForDockerUpgrade;
-                    killKubeDNSPods;
                     waitForDockerRegistryRemote;
                     waitForKubernetes;
                     deployDashboard;
                     deployIngressController;
-                )  &
+                ) &
                 wait;
             ) | stdin-spinner
             echo "[$(simple_date)] done"
@@ -205,7 +204,7 @@ main () {
             installStdinSpinner;
             echo "[$(simple_date)] Setting up... (~1 min)"
             (
-                cat /opt/setup.out &
+                true &
                 (
                     installStern;
                     waitForDockerUpgrade;
