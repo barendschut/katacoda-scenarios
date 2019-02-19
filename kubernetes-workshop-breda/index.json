@@ -24,11 +24,6 @@
         {
           "file": "k8s_workshop_breda",
           "target": "~/.ssh/"
-        },
-        {
-          "file": "tiny-cd",
-          "target": "/usr/local/bin/",
-          "chmod": "+x"
         }
       ]
     }

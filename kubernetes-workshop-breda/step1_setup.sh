@@ -37,7 +37,7 @@ waitForDockerRegistryRemote() {
 
 waitForKubernetes() {
     until
-        2>&1 kubectl -v999 --request-timeout=1s version;
+        2>&1 kubectl -v9 --request-timeout=1s version;
     do
         sleep 0.5;
     done
@@ -45,7 +45,7 @@ waitForKubernetes() {
 
 waitForWeave() {
     (
-        # 2>&1 kubectl -v999 apply -f https://git.io/weave-kube
+        # 2>&1 kubectl -v9 apply -f https://git.io/weave-kube
         until
             [ "$(2>&1 kubectl get daemonset -n kube-system weave-net -o jsonpath='{.status.numberReady}')" = "2" ];
         do
@@ -57,7 +57,7 @@ waitForWeave() {
 
 killKubeProxyPods() {
     (
-        2>&1 kubectl -v999 delete pods -lk8s-app=kube-proxy -n kube-system;
+        2>&1 kubectl -v9 delete pods -lk8s-app=kube-proxy -n kube-system;
         until
             [ "$(kubectl get daemonset -n kube-system kube-proxy -o jsonpath='{.status.numberReady}')" = "2" ];
         do
@@ -68,29 +68,29 @@ killKubeProxyPods() {
 }
 
 killKubeDNSPods() {
-    2>&1 kubectl -v999 delete pods -lkubernetes.io/name=KubeDNS -n kube-system;
+    2>&1 kubectl -v9 delete pods -lkubernetes.io/name=KubeDNS -n kube-system;
 }
 
 killCoreDNSPods() {
     (
-        2>&1 kubectl -v999 delete pods -lk8s-app=coredns -n kube-system;
-        2>&1 kubectl -v999 wait deployments/coredns -n kube-system --for condition=Available;
+        2>&1 kubectl -v9 delete pods -lk8s-app=coredns -n kube-system;
+        2>&1 kubectl -v9 wait deployments/coredns -n kube-system --for condition=Available;
     )
 }
 
 deployIngressController() {
     (
         . /opt/hosts.env;
-        curl -sSL https://gist.github.com/sgreben/2ba25294973c9e299d6770aea320f780/raw |
+        curl -sSL https://gist.github.com/sgreben/2ba25294973c9e299d6770aea320f780/raw// |
             sed "s/HOST_IP/$HOST1_IP/" |
-            2>&1 kubectl -v999 apply -f -;
+            2>&1 kubectl -v9 apply -f -;
     )
 }
 
 deployDashboard() {
     (
-        2>&1 kubectl -v999 apply -f https://gist.github.com/sgreben/bd04d51eb2f683091ba62d7389a564a8/raw//;
-        2>&1 kubectl -v999 wait deployments/kubernetes-dashboard -n kube-system --for condition=Available;
+        2>&1 kubectl -v9 apply -f https://gist.github.com/sgreben/bd04d51eb2f683091ba62d7389a564a8/raw//;
+        2>&1 kubectl -v9 wait deployments/kubernetes-dashboard -n kube-system --for condition=Available;
     )
 }
 
@@ -180,11 +180,12 @@ runDockerRegistry() {
 hideCursor() { printf "\033[?25l"; }
 restoreCursor() { printf "\033[?25h"; }
 
+clear;
+hideCursor;
+installStdinSpinner;
+
 case "$(hostname)" in
     master)
-        clear
-        hideCursor
-        installStdinSpinner
         echo "[$(simple_date)] Setting up... (~2 min)"
         (
             configureGit;
@@ -205,9 +206,6 @@ case "$(hostname)" in
         bash
     ;;
     node01)
-        clear;
-        hideCursor;
-        installStdinSpinner;
         echo "[$(simple_date)] Setting up... (~1 min)"
         (
             installStern;
