@@ -27,7 +27,7 @@
         },
         {
           "file": "tiny-cd",
-          "target": "/usr/bin",
+          "target": "/usr/bin/",
           "chmod": "+x"
         }
       ]
