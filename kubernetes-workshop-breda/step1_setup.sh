@@ -278,6 +278,8 @@ upgradeKubernetesTo() {
     upgradeKubeletOn master;
     upgradeKubeletConfigOn node01;
     upgradeKubeletOn node01;
+    upgradeKubectlOn node01;
+    upgradeKubectlOn master;
     kubernetesUnDrain node01;
     kubernetesUnDrain master;
 }
@@ -314,6 +316,15 @@ upgradeKubeletOn() {
     2>&1 sloppy_ssh root@"$HOST" "
         export DEBIAN_FRONTEND=noninteractive;
         apt-get install --no-install-recommends -y kubelet kubeadm;
+    ";
+}
+
+upgradeKubectlOn() {
+    HOST="$1";
+
+    2>&1 sloppy_ssh root@"$HOST" "
+        export DEBIAN_FRONTEND=noninteractive;
+        apt-get install --no-install-recommends -y kubectl;
     ";
 }
 
