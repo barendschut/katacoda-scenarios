@@ -206,7 +206,7 @@ main() {
                 deployDashboard;
                 deployIngressController;
                 waitForDockerRegistryRemote;
-            ) | stdin-spinner
+            ) # | stdin-spinner
             echo "[$(simple_date)] done"
             restoreCursor;
             configureSSH;
