@@ -66,29 +66,6 @@ waitForWeave() {
     )
 }
 
-killKubeProxyPods() {
-    (
-        2>&1 kubectl -v1 delete pods -lk8s-app=kube-proxy -n kube-system;
-        until
-            [ "$(kubectl get daemonset -n kube-system kube-proxy -o jsonpath='{.status.numberReady}')" = "2" ];
-        do
-            echo .;
-            sleep 0.5;
-        done;
-    )
-}
-
-killKubeDNSPods() {
-    2>&1 kubectl -v1 delete pods -lkubernetes.io/name=KubeDNS -n kube-system;
-}
-
-killCoreDNSPods() {
-    (
-        2>&1 kubectl -v1 delete pods -lk8s-app=coredns -n kube-system;
-        2>&1 kubectl -v1 wait deployments/coredns -n kube-system --for condition=Available;
-    )
-}
-
 deployIngressController() {
     (
         . /opt/hosts.env;
@@ -134,14 +111,12 @@ installDockerCompose() {
 }
 
 installStern() {
-    (
-        until
-            2>&1 curl --fail -Lo /usr/local/bin/stern https://github.com/wercker/stern/releases/download/1.10.0/stern_linux_amd64;
-        do
-            sleep 0.5;
-        done;
-        chmod +x /usr/local/bin/stern;
-    )
+    until
+        2>&1 curl --fail -Lo /usr/local/bin/stern https://github.com/wercker/stern/releases/download/1.10.0/stern_linux_amd64;
+    do
+        sleep 0.5;
+    done;
+    chmod +x /usr/local/bin/stern;
 }
 
 installStdinSpinner() {
@@ -238,7 +213,6 @@ main() {
 
 upgradeCluster() {
     exec 2>&1;
-    killKubeDNSPods;
     setUpRegistryEtcHostsOn node01;
     setUpRegistryEtcHostsOn localhost;
     setUpMasterEtcHostsOn node01;
@@ -246,10 +220,13 @@ upgradeCluster() {
     #upgradeKubernetesTo v1.12.1;
     #upgradeKubernetesTo v1.13.3;
     kubectl -v1 apply -f https://git.io/weave-kube;
-    generateCertsIn "$CERTS_PATH";
     (
-        kubernetesDrain node01;
-        kubernetesDrain master;
+        generateCertsIn "$CERTS_PATH" &
+        (
+            kubernetesDrain node01;
+            kubernetesDrain master;
+        ) &
+        wait;
     );
     (
         aptGetUpdateOn node01;
@@ -257,8 +234,6 @@ upgradeCluster() {
         setUpCertsOn "$CERTS_PATH" node01;
         upgradeDockerOn node01;
         startDockerOn node01;
-        waitForKubernetes;
-        kubernetesUnDrain node01;
     ) &
     (
         aptGetUpdateOn localhost;
@@ -266,10 +241,11 @@ upgradeCluster() {
         setUpCertsOn "$CERTS_PATH" localhost;
         upgradeDockerOn localhost;
         startDockerOn localhost;
-        waitForKubernetes;
-        kubernetesUnDrain master;
     ) &
     wait;
+    waitForKubernetes;
+    kubernetesUnDrain node01;
+    kubernetesUnDrain master;
 }
 
 upgradeKubernetesTo() {
@@ -381,10 +357,6 @@ EOF
         apt-get install --no-install-recommends -y docker.io;
         touch /opt/upgrade-docker-done;
     ";
-}
-
-killKubeDNSPods() {
-    kubectl delete pods -lkubernetes.io/name=KubeDNS -n kube-system || true
 }
 
 copyKubeconfigTo() {
