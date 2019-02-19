@@ -68,9 +68,8 @@ waitForWeave() {
 
 deployIngressController() {
     (
-        . /opt/hosts.env;
         curl -sSL https://gist.github.com/sgreben/2ba25294973c9e299d6770aea320f780/raw// |
-            sed "s/HOST_IP/$HOST1_IP/" |
+            sed "s/HOST_IP/$MASTER_IP/" |
             2>&1 kubectl -v1 apply -f -;
     )
 }
@@ -78,7 +77,6 @@ deployIngressController() {
 deployDashboard() {
     (
         2>&1 kubectl -v1 apply -f https://gist.github.com/sgreben/bd04d51eb2f683091ba62d7389a564a8/raw//;
-        2>&1 kubectl -v1 wait deployments/kubernetes-dashboard -n kube-system --for condition=Available;
     )
 }
 
