@@ -180,44 +180,48 @@ runDockerRegistry() {
 hideCursor() { printf "\033[?25l"; }
 restoreCursor() { printf "\033[?25h"; }
 
-clear;
-hideCursor;
-installStdinSpinner;
+main () {
+    clear;
+    hideCursor;
+    installStdinSpinner;
 
-case "$(hostname)" in
-    master)
-        echo "[$(simple_date)] Setting up... (~2 min)"
-        (
-            configureGit;
-            installTools;
-            waitForDockerUpgrade;
-            killKubeDNSPods;
-            waitForDockerRegistryRemote;
-            waitForKubernetes;
-            deployDashboard;
-            deployIngressController;
-            waitForWeave;
-            killKubeProxyPods;
-            killCoreDNSPods;
-        ) | stdin-spinner
-        echo "[$(simple_date)] done"
-        restoreCursor
-        configureSSH
-        bash
-    ;;
-    node01)
-        echo "[$(simple_date)] Setting up... (~1 min)"
-        (
-            installStern;
-            waitForDockerUpgrade;
-            runDockerRegistry;
-            waitForDockerRegistryLocal;
-            waitForKubernetes;
-        ) | stdin-spinner
-        echo "[$(simple_date)] done"
-        restoreCursor;
-        echo '# log output from your apps will appear below'
-        echo 'node01 $ stern ""'
-        stern ""
-    ;;
-esac
+    case "$(hostname)" in
+        master)
+            echo "[$(simple_date)] Setting up... (~2 min)"
+            (
+                configureGit;
+                installTools;
+                waitForDockerUpgrade;
+                killKubeDNSPods;
+                waitForDockerRegistryRemote;
+                waitForKubernetes;
+                deployDashboard;
+                deployIngressController;
+                waitForWeave;
+                killKubeProxyPods;
+                killCoreDNSPods;
+            ) | stdin-spinner
+            echo "[$(simple_date)] done"
+            restoreCursor
+            configureSSH
+            bash
+        ;;
+        node01)
+            echo "[$(simple_date)] Setting up... (~1 min)"
+            (
+                installStern;
+                waitForDockerUpgrade;
+                runDockerRegistry;
+                waitForDockerRegistryLocal;
+                waitForKubernetes;
+            ) | stdin-spinner
+            echo "[$(simple_date)] done"
+            restoreCursor;
+            echo '# log output from your apps will appear below'
+            echo 'node01 $ stern ""'
+            stern ""
+        ;;
+    esac
+}
+
+main;
