@@ -248,8 +248,8 @@ upgradeCluster() {
     ) &
     wait;
     waitForKubernetes;
-    kubernetesUnDrain node01;
     kubernetesUnDrain master;
+    kubernetesUnDrain node01;
 }
 
 upgradeKubernetesTo() {
