@@ -272,13 +272,14 @@ aptGetUpdateOn() {
 }
 
 kubernetesDrain() {
-    NODENAME="$1";
-    kubectl drain "$NODENAME" --delete-local-data=true --ignore-daemonsets=true;
+    NODE="$1";
+    kubectl drain "$NODE" --delete-local-data=true --ignore-daemonsets=true;
 }
 
 kubernetesUnDrain() {
-    NODENAME="$1";
-    kubectl uncordon "$NODENAME"
+    NODE="$1";
+    kubectl wait --for condition=Ready node/"$NODE";
+    kubectl uncordon "$NODE"
 }
 
 
