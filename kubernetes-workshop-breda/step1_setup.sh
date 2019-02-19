@@ -201,6 +201,7 @@ main() {
             (
                 true &
                 (
+                    exec 2>&1;
                     configureGit;
                     installTools;
                     upgradeCluster;
@@ -224,6 +225,7 @@ main() {
             (
                 true &
                 (
+                    exec 2>&1;
                     installStern;
                     waitForDockerUpgrade;
                     runDockerRegistry;
