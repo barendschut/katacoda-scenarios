@@ -15,16 +15,9 @@ waitForDockerRegistryLocal() {
 }
 
 waitForDockerUpgrade() {
-    (
-        until [ -e /opt/upgrade-docker ] || [ -e /opt/upgrade-docker-done ]; do
-            sleep 1;
-        done;
-        2>&1 cat /opt/upgrade-docker || true;
-        until 2>&1 docker version; do
-            echo .;
-            sleep 0.5;
-        done;
-    )
+    until [ -e /opt/upgrade-docker-done ]; do
+        sleep 1;
+    done;
 }
 
 waitForDockerRegistryRemote() {
@@ -45,7 +38,7 @@ waitForKubernetes() {
 
 waitForWeave() {
     (
-        # 2>&1 kubectl -v9 apply -f https://git.io/weave-kube
+        2>&1 kubectl -v9 apply -f https://git.io/weave-kube
         until
             [ "$(2>&1 kubectl get daemonset -n kube-system weave-net -o jsonpath='{.status.numberReady}')" = "2" ];
         do
@@ -188,17 +181,18 @@ main () {
             hideCursor;
             installStdinSpinner;
             (
-                configureGit;
-                installTools;
-                waitForDockerUpgrade;
-                killKubeDNSPods;
-                waitForDockerRegistryRemote;
-                waitForKubernetes;
-                deployDashboard;
-                deployIngressController;
-                waitForWeave;
-                killKubeProxyPods;
-                killCoreDNSPods;
+                cat /opt/setup.out &
+                (
+                    configureGit;
+                    installTools;
+                    waitForDockerUpgrade;
+                    killKubeDNSPods;
+                    waitForDockerRegistryRemote;
+                    waitForKubernetes;
+                    deployDashboard;
+                    deployIngressController;
+                )  &
+                wait;
             ) | stdin-spinner
             echo "[$(simple_date)] done"
             restoreCursor
@@ -211,11 +205,15 @@ main () {
             installStdinSpinner;
             echo "[$(simple_date)] Setting up... (~1 min)"
             (
-                installStern;
-                waitForDockerUpgrade;
-                runDockerRegistry;
-                waitForDockerRegistryLocal;
-                waitForKubernetes;
+                cat /opt/setup.out &
+                (
+                    installStern;
+                    waitForDockerUpgrade;
+                    runDockerRegistry;
+                    waitForDockerRegistryLocal;
+                    waitForKubernetes;
+                ) &
+                wait;
             ) | stdin-spinner
             echo "[$(simple_date)] done"
             restoreCursor;
