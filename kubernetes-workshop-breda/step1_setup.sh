@@ -24,14 +24,15 @@ waitForDockerRegistryLocal() {
     until
         2>&1 docker inspect -f '{{.ID}}' registry;
     do
-        sleep 0.5;
         echo .;
+        sleep 0.5;
     done
 }
 
 waitForDockerUpgrade() {
-    until [ -e $DOCKER_UPGRADE_DONE_MARKER_PATH ]; do
-        sleep 1;
+    until [ -e "$DOCKER_UPGRADE_DONE_MARKER_PATH" ]; do
+        echo .,
+        sleep 0.5;
     done;
 }
 
