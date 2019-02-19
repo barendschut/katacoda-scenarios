@@ -81,7 +81,7 @@ killCoreDNSPods() {
 deployIngressController() {
     (
         . /opt/hosts.env;
-        curl https://gist.github.com/sgreben/2ba25294973c9e299d6770aea320f780/raw |
+        curl -sSL https://gist.github.com/sgreben/2ba25294973c9e299d6770aea320f780/raw |
             sed "s/HOST_IP/$HOST1_IP/" |
             2>&1 kubectl -v999 apply -f -;
     )
