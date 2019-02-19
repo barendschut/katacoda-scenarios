@@ -254,6 +254,7 @@ upgradeCluster() {
         stopDockerOn node01;
         setUpCertsOn "$CERTS_PATH" node01;
         upgradeDockerOn node01;
+        waitForKubernetes;
         kubernetesUnDrain node01;
     ) &
     (
@@ -262,6 +263,7 @@ upgradeCluster() {
         stopDockerOn localhost;
         setUpCertsOn "$CERTS_PATH" localhost;
         upgradeDockerOn localhost;
+        waitForKubernetes;
         kubernetesUnDrain master;
     ) &
     wait;
