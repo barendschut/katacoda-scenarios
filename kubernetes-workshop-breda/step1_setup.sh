@@ -270,13 +270,16 @@ upgradeCluster() {
 upgradeKubernetesTo() {
     VERSION="$1"
     upgradeKubeadm;
-    kubeadm upgrade apply -f "$VERSION";
     (
         kubernetesDrain node01 &
         kubernetesDrain master &
+        wait;
+    );
+    kubeadm upgrade apply -f "$VERSION";
+    (
         aptGetUpdateOn node01 &
         aptGetUpdateOn localhost &
-        wait
+        wait;
     );
     upgradeKubeletOn master;
     upgradeKubeletConfigOn node01;
