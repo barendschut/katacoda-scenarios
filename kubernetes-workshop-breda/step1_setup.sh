@@ -225,7 +225,7 @@ upgradeCluster() {
     copyKubeconfigTo node01;
     kubectl -v1 apply -f https://git.io/weave-kube;
     kubectl delete pods -n kube-system -lname=weave-net;
-    waitForWeave;
+    kubectl wait --for condition=Ready node/master
     upgradeKubernetesTo v1.12.1;
     #upgradeKubernetesTo v1.13.3;
     (
