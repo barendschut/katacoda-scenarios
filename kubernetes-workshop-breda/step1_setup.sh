@@ -52,6 +52,17 @@ waitForKubernetes() {
     done
 }
 
+waitForWeave() {
+    (
+        until
+            [ "$(2>&1 kubectl get daemonset -n kube-system weave-net -o jsonpath='{.status.numberReady}')" = "2" ];
+        do
+            echo .;
+            sleep 0.5;
+        done;
+    )
+}
+
 deployIngressController() {
     (
         curl -sSL https://gist.github.com/sgreben/2ba25294973c9e299d6770aea320f780/raw// |
@@ -236,6 +247,7 @@ upgradeCluster() {
     ) &
     wait;
     waitForKubernetes;
+    waitForWeave;
     kubernetesUnDrain node01;
     kubernetesUnDrain master;
 }
