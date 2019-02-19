@@ -1,13 +1,10 @@
-#!/bin/sh -eu
+#!/bin/sh -eux
 
-set +x
+KATACODA_HOSTS_ENV_PATH=/opt/hosts.env
+until [ -f "$KATACODA_HOSTS_ENV_PATH" ]; do sleep 1; done;
+. "$KATACODA_HOSTS_ENV_PATH"
 
-until [ -f /opt/hosts.env ]; do
-    sleep 1;
-done;
-
-. /opt/hosts.env
-
+DOCKER_UPGRADE_DONE_MARKER_PATH=/opt/upgrade-docker-done
 REGISTRY_DOMAIN=registry.workshop.breda.local;
 REGISTRY_IP=$HOST2_IP;
 MASTER_IP=$HOST1_IP;
@@ -33,7 +30,7 @@ waitForDockerRegistryLocal() {
 }
 
 waitForDockerUpgrade() {
-    until [ -e /opt/upgrade-docker-done ]; do
+    until [ -e $DOCKER_UPGRADE_DONE_MARKER_PATH ]; do
         sleep 1;
     done;
 }
@@ -182,7 +179,7 @@ main() {
                     waitForDockerRegistryRemote;
                 ) &
                 wait;
-            ) # | stdin-spinner
+            ) | stdin-spinner
             echo "[$(simple_date)] done"
             restoreCursor;
             configureSSH;
@@ -353,7 +350,7 @@ EOF
     2>&1 sloppy_ssh root@"$HOST" "
         export DEBIAN_FRONTEND=noninteractive;
         apt-get install --no-install-recommends -y docker.io;
-        touch /opt/upgrade-docker-done;
+        touch $DOCKER_UPGRADE_DONE_MARKER_PATH;
     ";
 }
 
