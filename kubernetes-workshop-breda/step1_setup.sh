@@ -52,18 +52,6 @@ waitForKubernetes() {
     done
 }
 
-waitForWeave() {
-    (
-        2>&1 kubectl -v1 apply -f https://git.io/weave-kube
-        until
-            [ "$(2>&1 kubectl get daemonset -n kube-system weave-net -o jsonpath='{.status.numberReady}')" = "2" ];
-        do
-            echo .;
-            sleep 0.5;
-        done;
-    )
-}
-
 deployIngressController() {
     (
         curl -sSL https://gist.github.com/sgreben/2ba25294973c9e299d6770aea320f780/raw// |
@@ -162,47 +150,55 @@ runDockerRegistry() {
 hideCursor() { printf "\033[?25l"; }
 restoreCursor() { printf "\033[?25h"; }
 
+main_master() {
+    clear;
+    echo "[$(simple_date)] Setting up... (~2 min)"
+    hideCursor;
+    installStdinSpinner;
+    (
+        installTools &
+        (
+            configureGit;
+            upgradeCluster;
+            waitForKubernetes;
+            deployDashboard;
+            deployIngressController;
+            waitForDockerRegistryRemote;
+        ) &
+        wait;
+    ) | stdin-spinner
+    echo "[$(simple_date)] done"
+    restoreCursor;
+    configureSSH;
+    bash;
+}
+
+main_node01() {
+    clear;
+    hideCursor;
+    installStdinSpinner;
+    echo "[$(simple_date)] Setting up... (~1 min)"
+    (
+        installStern;
+        waitForDockerUpgrade;
+        runDockerRegistry;
+        waitForDockerRegistryLocal;
+        waitForKubernetes;
+    ) | stdin-spinner
+    echo "[$(simple_date)] done"
+    restoreCursor;
+    echo '# log output from your apps will appear below'
+    echo 'node01 $ stern ""'
+    stern ""
+}
+
 main() {
     case "$(hostname)" in
         master)
-            clear;
-            echo "[$(simple_date)] Setting up... (~2 min)"
-            hideCursor;
-            installStdinSpinner;
-            (
-                installTools &
-                (
-                    configureGit;
-                    upgradeCluster;
-                    waitForKubernetes;
-                    deployDashboard;
-                    deployIngressController;
-                    waitForDockerRegistryRemote;
-                ) &
-                wait;
-            ) | stdin-spinner
-            echo "[$(simple_date)] done"
-            restoreCursor;
-            configureSSH;
-            bash;
+            main_master
         ;;
         node01)
-            clear;
-            hideCursor;
-            installStdinSpinner;
-            echo "[$(simple_date)] Setting up... (~1 min)"
-            (
-                installStern;
-                waitForDockerUpgrade;
-                runDockerRegistry;
-                waitForDockerRegistryLocal;
-                waitForKubernetes;
-            ) | stdin-spinner
-            echo "[$(simple_date)] done"
-            restoreCursor;
-            echo '# log output from your apps will appear below'
-            echo 'node01 $ stern ""'
-            stern ""
+            main_node01
         ;;
     esac
 }
@@ -215,7 +211,7 @@ upgradeCluster() {
     copyKubeconfigTo node01;
     #upgradeKubernetesTo v1.12.1;
     #upgradeKubernetesTo v1.13.3;
-    kubectl -v1 apply -f https://git.io/weave-kube;
+    #kubectl -v1 apply -f https://git.io/weave-kube;
     (
         generateCertsIn "$CERTS_PATH" &
         (
