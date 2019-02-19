@@ -226,7 +226,7 @@ upgradeCluster() {
     kubectl -v1 apply -f https://git.io/weave-kube;
     kubectl delete pods -n kube-system -lname=weave-net;
     waitForWeave;
-    #upgradeKubernetesTo v1.12.1;
+    upgradeKubernetesTo v1.12.1;
     #upgradeKubernetesTo v1.13.3;
     (
         generateCertsIn "$CERTS_PATH" &
@@ -259,17 +259,7 @@ upgradeCluster() {
 upgradeKubernetesTo() {
     VERSION="$1"
     upgradeKubeadm;
-    (
-        kubernetesDrain node01 &
-        kubernetesDrain master &
-        wait;
-    );
     kubeadm upgrade apply -f "$VERSION";
-    (
-        aptGetUpdateOn node01 &
-        aptGetUpdateOn localhost &
-        wait;
-    );
     upgradeKubeletOn master;
     upgradeKubeletConfigOn node01;
     upgradeKubeletOn node01;
