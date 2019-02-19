@@ -55,7 +55,9 @@ waitForKubernetes() {
 waitForWeave() {
     (
         until
-            [ "$(2>&1 kubectl get daemonset -n kube-system weave-net -o jsonpath='{.status.numberReady}')" = "2" ];
+            numberReady=$(2>&1 kubectl get daemonset -n kube-system weave-net -o jsonpath='{.status.numberReady}') &&
+            numberDesired=$(2>&1 kubectl get daemonset -n kube-system weave-net -o jsonpath='{.status.desiredNumberScheduled}') &&
+            [ "$numberReady" = "$numberDesired" ];
         do
             echo .;
             sleep 0.5;
@@ -138,6 +140,7 @@ configureSSH() {
         >/dev/null 2>/dev/null eval "\$(ssh-agent)";
         >/dev/null 2>/dev/null ssh-add ~/.ssh/k8s_workshop_breda;
         alias g=git;
+        alias k=kubectl;
 EOF
     cat <<EOF
 $(simple_date)] SSH public key:
