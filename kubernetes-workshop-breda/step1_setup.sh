@@ -15,7 +15,7 @@ CERTS_PATH=~/.certs.src;
 
 alias simple_date="date +'%H:%M:%S'"
 
-2>&1 sloppy_ssh() {
+sloppy_ssh() {
     /usr/bin/ssh -oBatchMode=yes -o TCPKeepAlive=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=30 -o ConnectTimeout=30 -o ConnectionAttempts=30 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=error "$@";
 }
 
@@ -199,13 +199,16 @@ main() {
             hideCursor;
             installStdinSpinner;
             (
-                configureGit;
-                installTools;
-                upgradeCluster;
-                waitForKubernetes;
-                deployDashboard;
-                deployIngressController;
-                waitForDockerRegistryRemote;
+                installTools &
+                (
+                    configureGit;
+                    upgradeCluster;
+                    waitForKubernetes;
+                    deployDashboard;
+                    deployIngressController;
+                    waitForDockerRegistryRemote;
+                ) &
+                wait;
             ) # | stdin-spinner
             echo "[$(simple_date)] done"
             restoreCursor;
