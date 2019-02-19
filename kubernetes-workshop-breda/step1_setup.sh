@@ -223,7 +223,6 @@ upgradeCluster() {
     #upgradeKubernetesTo v1.12.1;
     #upgradeKubernetesTo v1.13.3;
     kubectl -v1 apply -f https://git.io/weave-kube;
-    kubectl delete pods -n kube-system -lname=weave-net
     (
         generateCertsIn "$CERTS_PATH" &
         (
@@ -286,7 +285,7 @@ aptGetUpdateOn() {
 
 kubernetesDrain() {
     NODENAME="$1"
-    kubectl drain "$NODENAME" --delete-local-data=true --ignore-daemonsets
+    kubectl drain "$NODENAME" --delete-local-data=true
 }
 
 kubernetesUnDrain() {
