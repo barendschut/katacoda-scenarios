@@ -1,9 +1,27 @@
 #!/bin/sh -eu
 
 set +x
+
+until [ -f /opt/hosts.env ]; do
+    sleep 1;
+done;
+
+. /opt/hosts.env
+
 REGISTRY_DOMAIN=registry.workshop.breda.local;
+REGISTRY_IP=$HOST2_IP;
+MASTER_IP=$HOST1_IP;
+CERTS_PATH=~/.certs.src;
 
 alias simple_date="date +'%H:%M:%S'"
+
+sloppy_ssh() {
+    /usr/bin/ssh -oBatchMode=yes -o TCPKeepAlive=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=30 -o ConnectTimeout=30 -o ConnectionAttempts=30 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=error "$@";
+}
+
+sloppy_scp() {
+    /usr/bin/scp -oBatchMode=yes -o TCPKeepAlive=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=30 -o ConnectTimeout=30 -o ConnectionAttempts=30 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=error "$@";
+}
 
 waitForDockerRegistryLocal() {
     until
@@ -173,7 +191,7 @@ runDockerRegistry() {
 hideCursor() { printf "\033[?25l"; }
 restoreCursor() { printf "\033[?25h"; }
 
-main () {
+main() {
     case "$(hostname)" in
         master)
             clear;
@@ -185,11 +203,11 @@ main () {
                 (
                     configureGit;
                     installTools;
-                    waitForDockerUpgrade;
-                    waitForDockerRegistryRemote;
+                    upgradeCluster;
                     waitForKubernetes;
                     deployDashboard;
                     deployIngressController;
+                    waitForDockerRegistryRemote;
                 ) &
                 wait;
             ) | stdin-spinner
@@ -221,6 +239,203 @@ main () {
             stern ""
         ;;
     esac
+}
+
+upgradeCluster() {
+    killKubeDNSPods;
+    setUpRegistryEtcHostsOn node01;
+    setUpRegistryEtcHostsOn localhost;
+    setUpMasterEtcHostsOn node01;
+    copyKubeconfigTo node01;
+    upgradeKubernetesTo v1.12.1;
+    upgradeKubernetesTo v1.13.3;
+    kubectl -v9 apply -f https://git.io/weave-kube;
+    generateCertsIn "$CERTS_PATH";
+    (
+        kubernetesDrain node01;
+        stopDockerOn node01;
+        setUpCertsOn "$CERTS_PATH" node01;
+        upgradeDockerOn node01;
+        kubernetesUnDrain node01;
+    ) &
+    (
+        kubernetesDrain master;
+        stopDockerOn localhost;
+        setUpCertsOn "$CERTS_PATH" localhost;
+        upgradeDockerOn localhost;
+        kubernetesUnDrain master;
+    ) &
+    wait;
+    startDockerOn localhost &
+    startDockerOn node01 &
+    wait;
+}
+
+upgradeKubernetesTo() {
+    VERSION="$1"
+    upgradeKubeadm;
+    kubeadm upgrade apply -f "$VERSION";
+    (
+        kubernetesDrain node01 &
+        kubernetesDrain master &
+        aptGetUpdateOn node01 &
+        aptGetUpdateOn localhost &
+        wait
+    );
+    upgradeKubeletOn master;
+    upgradeKubeletConfigOn node01;
+    upgradeKubeletOn node01;
+    kubernetesUnDrain node01;
+    kubernetesUnDrain master;
+}
+
+aptGetUpdateOn() {
+    HOST="$1"
+    sloppy_ssh root@"$HOST" "
+        export DEBIAN_FRONTEND=noninteractive;
+        apt-get -y update;
+    ";
+}
+
+kubernetesDrain() {
+    NODENAME="$1"
+    kubectl drain "$NODENAME" --ignore-daemonsets
+}
+
+kubernetesUnDrain() {
+    NODENAME="$1"
+    kubectl uncordon "$NODENAME"
+}
+
+
+upgradeKubeadm() {
+    export DEBIAN_FRONTEND=noninteractive;
+    apt-mark unhold kubeadm && \
+    apt-get install --no-install-recommends -y kubeadm && \
+    apt-mark hold kubeadm
+}
+
+upgradeKubeletOn() {
+    HOST="$1";
+
+    sloppy_ssh root@"$HOST" "
+        export DEBIAN_FRONTEND=noninteractive;
+        apt-get install --no-install-recommends -y kubelet kubeadm;
+    ";
+}
+
+upgradeKubeletConfigOn() {
+    HOST="$1";
+
+    sloppy_ssh root@"$HOST" "
+        kubeadm upgrade node config --kubelet-version=\"$(kubelet --version | cut -d ' ' -f 2)\";
+        systemctl restart kubelet;
+    ";
+}
+
+stopDockerOn() {
+    HOST="$1"
+    sloppy_ssh root@"$HOST" "
+        service docker stop;
+    ";
+}
+
+startDockerOn() {
+    HOST="$1"
+    sloppy_ssh root@"$HOST" "
+        systemctl daemon-reload;
+        service docker start;
+    ";
+}
+
+upgradeDockerOn() {
+    HOST="$1";
+
+    sloppy_ssh root@"$HOST" "
+        mkdir -p /etc/systemd/system/docker.service.d;
+    ";
+    sloppy_ssh root@"$HOST" "
+        cat > /etc/systemd/system/docker.service.d/docker.conf;
+    " <<EOF
+[Service]
+ExecStart=
+ExecStart=/usr/bin/dockerd
+EOF
+    sloppy_ssh root@"$HOST" "
+        export DEBIAN_FRONTEND=noninteractive;
+        apt-get install --no-install-recommends -y docker.io;
+        touch /opt/upgrade-docker-done;
+    ";
+}
+
+killKubeDNSPods() {
+    kubectl delete pods -lkubernetes.io/name=KubeDNS -n kube-system || true
+}
+
+copyKubeconfigTo() {
+    HOST="$1";
+    until [ -f /root/.kube/config ]; do
+        sleep 1;
+    done;
+    sloppy_ssh root@"$HOST" "
+        mkdir -p /root/.kube/;
+    ";
+    sloppy_scp /root/.kube/config root@"$HOST":/root/.kube/
+}
+
+setUpRegistryEtcHostsOn() {
+    HOST="$1";
+    sloppy_ssh root@"$HOST" "
+        echo '${REGISTRY_IP}' '${REGISTRY_DOMAIN}' >> /etc/hosts
+    "
+}
+
+setUpMasterEtcHostsOn() {
+    HOST="$1";
+    sloppy_ssh root@"$HOST" "
+        echo '${MASTER_IP}' master >> /etc/hosts
+    "
+}
+
+generateCertsIn() {
+    export REGISTRY_DOMAIN;
+    CERTS_PATH="$1";
+    mkdir -p "$CERTS_PATH";
+    (
+        set -eu;
+        cd "$CERTS_PATH"
+        # Generate a root key
+        openssl genrsa -out rootCA.key 512;
+        # Generate a root certificate
+        openssl req -x509 -new -nodes -key rootCA.key -days 365 \
+            -subj "/C=UK/ST=TEST/L=TEST/O=TEST/CN=${REGISTRY_DOMAIN}" \
+            -out rootCA.crt;
+        # Generate key for host
+        openssl genrsa -out ${REGISTRY_DOMAIN}.key;
+        # Generate CSR
+        openssl req -new -key ${REGISTRY_DOMAIN}.key \
+            -subj "/C=UK/ST=TEST/L=TEST/O=TEST/CN=${REGISTRY_DOMAIN}" \
+            -out ${REGISTRY_DOMAIN}.csr;
+        # Sign certificate request
+        openssl x509 -req -in ${REGISTRY_DOMAIN}.csr -CA rootCA.crt -CAkey rootCA.key -CAcreateserial -days 365 -out ${REGISTRY_DOMAIN}.crt;
+    )
+}
+
+setUpCertsOn() {
+    export REGISTRY_DOMAIN;
+    CERTS_PATH="$1";
+    HOST="$2";
+    sloppy_ssh root@"$HOST" "
+        mkdir -p /root/.certs;
+        mkdir -p /usr/local/share/ca-certificates/${REGISTRY_DOMAIN};
+        mkdir -p /etc/docker/certs.d/${REGISTRY_DOMAIN};
+    ";
+    sloppy_scp "$CERTS_PATH"/rootCA.crt root@"$HOST":/usr/local/share/ca-certificates/${REGISTRY_DOMAIN};
+    sloppy_scp "$CERTS_PATH"/rootCA.crt root@"$HOST":/etc/docker/certs.d/${REGISTRY_DOMAIN}/ca.crt;
+    sloppy_scp -r "$CERTS_PATH"/* root@"$HOST":/root/.certs/;
+    sloppy_ssh root@"$HOST" "
+        update-ca-certificates;
+    ";
 }
 
 main;
