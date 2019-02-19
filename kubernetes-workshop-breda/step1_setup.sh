@@ -219,13 +219,15 @@ main() {
 
 upgradeCluster() {
     exec 2>&1;
+    kubectl wait --for condition=Ready node/master;
     setUpRegistryEtcHostsOn node01;
     setUpRegistryEtcHostsOn localhost;
     setUpMasterEtcHostsOn node01;
     copyKubeconfigTo node01;
     kubectl -v1 apply -f https://git.io/weave-kube;
     kubectl delete pods -n kube-system -lname=weave-net;
-    upgradeKubernetesTo v1.12.1;
+    #upgradeKubernetesTo v1.12.1;
+    #upgradeKubernetesTo v1.13.3;
     (
         aptGetUpdateOn node01;
         stopDockerOn node01;
@@ -244,7 +246,6 @@ upgradeCluster() {
     waitForKubernetes;
     kubernetesUnDrain master;
     kubernetesUnDrain node01;
-    upgradeKubernetesTo v1.13.3;
 }
 
 upgradeKubernetesTo() {
