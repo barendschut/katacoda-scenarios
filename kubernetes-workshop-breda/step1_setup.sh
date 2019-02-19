@@ -222,6 +222,7 @@ upgradeCluster() {
     copyKubeconfigTo node01;
     kubectl -v1 apply -f https://git.io/weave-kube;
     kubectl delete pods -n kube-system -lname=weave-net;
+    waitForWeave;
     #upgradeKubernetesTo v1.12.1;
     #upgradeKubernetesTo v1.13.3;
     (
@@ -276,7 +277,7 @@ upgradeKubernetesTo() {
 }
 
 aptGetUpdateOn() {
-    HOST="$1"
+    HOST="$1";
     2>&1 sloppy_ssh root@"$HOST" "
         export DEBIAN_FRONTEND=noninteractive;
         apt-get -y update;
@@ -284,12 +285,12 @@ aptGetUpdateOn() {
 }
 
 kubernetesDrain() {
-    NODENAME="$1"
-    kubectl drain "$NODENAME" --delete-local-data=true
+    NODENAME="$1";
+    kubectl drain "$NODENAME" --delete-local-data=true --ignore-daemonsets=true;
 }
 
 kubernetesUnDrain() {
-    NODENAME="$1"
+    NODENAME="$1";
     kubectl uncordon "$NODENAME"
 }
 
