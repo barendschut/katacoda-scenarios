@@ -387,7 +387,7 @@ generateCertsIn() {
     mkdir -p "$CERTS_PATH";
     (
         set -eu;
-        cd "$CERTS_PATH"
+        cd "$CERTS_PATH";
         # Generate a root key
         openssl genrsa -out rootCA.key 512;
         # Generate a root certificate
