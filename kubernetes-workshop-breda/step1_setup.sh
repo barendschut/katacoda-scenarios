@@ -71,7 +71,7 @@ deployDashboard() {
 }
 
 waitForDashboard() {
-    2>&1 kubectl -v1 wait -n kube-system deployment/kubernetes-dashboard --for condition=Available;
+    2>&1 kubectl -v1 wait --timeout=1m -n kube-system deployment/kubernetes-dashboard --for condition=Available;
 }
 
 installTools() {
