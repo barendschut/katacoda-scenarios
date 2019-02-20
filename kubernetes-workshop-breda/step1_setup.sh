@@ -163,10 +163,10 @@ main_master() {
     installStdinSpinner;
     (
         installTools &
+        prePullImages &
         (
             configureGit;
             upgradeCluster;
-            prePullImages;
             waitForKubernetes;
             deployDashboard;
             deployIngressController;
@@ -187,10 +187,11 @@ main_node01() {
     installStdinSpinner;
     echo "[$(simple_date)] Setting up... (~1 min)"
     (
-        installStern;
+        prePullImages &
+        installStern &
+        wait;
         waitForDockerUpgrade;
         runDockerRegistry;
-        prePullImages;
         waitForDockerRegistryLocal;
         waitForKubernetes;
     ) | stdin-spinner
