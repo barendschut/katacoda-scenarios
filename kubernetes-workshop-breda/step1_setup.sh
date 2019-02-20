@@ -180,7 +180,7 @@ main_master() {
             waitForDockerRegistryRemote;
         ) &
         wait;
-    ) # | stdin-spinner
+    ) | stdin-spinner
     echo "[$(simple_date)] done"
     restoreCursor;
     configureSSH;
