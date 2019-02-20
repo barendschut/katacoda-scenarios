@@ -224,8 +224,8 @@ upgradeCluster() {
     setUpRegistryEtcHostsOn localhost;
     setUpMasterEtcHostsOn node01;
     copyKubeconfigTo node01;
-    kubectl -v1 apply -f https://git.io/weave-kube;
-    kubectl delete pods -n kube-system -lname=weave-net;
+    # kubectl -v1 apply -f https://git.io/weave-kube;
+    # kubectl delete pods -n kube-system -lname=weave-net;
     waitForWeave;
     generateCertsIn "$CERTS_PATH";
     #upgradeKubernetesTo v1.12.1;
