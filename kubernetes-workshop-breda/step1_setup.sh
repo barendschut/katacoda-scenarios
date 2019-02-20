@@ -230,6 +230,8 @@ upgradeCluster() {
     generateCertsIn "$CERTS_PATH";
     #upgradeKubernetesTo v1.12.1;
     #upgradeKubernetesTo v1.13.3;
+    stopKubeletOn node01;
+    stopKubeletOn master;
     (
         aptGetUpdateOn node01;
         stopDockerOn node01;
@@ -245,6 +247,8 @@ upgradeCluster() {
         startDockerOn localhost;
     ) &
     wait;
+    startKubeletOn master;
+    startKubeletOn node01;
     waitForKubernetes;
     waitForWeave;
     kubernetesUnDrain master;
@@ -321,12 +325,27 @@ upgradeKubeletConfigOn() {
     ";
 }
 
+stopKubeletOn() {
+    HOST="$1"
+    2>&1 sloppy_ssh root@"$HOST" "
+        service kubelet stop;
+    ";
+}
+
+startKubeletOn() {
+    HOST="$1"
+    2>&1 sloppy_ssh root@"$HOST" "
+        service kubelet start;
+    ";
+}
+
 stopDockerOn() {
     HOST="$1"
     2>&1 sloppy_ssh root@"$HOST" "
         service docker stop;
     ";
 }
+
 
 startDockerOn() {
     HOST="$1"
