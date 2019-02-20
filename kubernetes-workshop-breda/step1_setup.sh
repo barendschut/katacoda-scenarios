@@ -12,71 +12,56 @@ CERTS_PATH=~/.certs.src;
 
 alias simple_date="date +'%H:%M:%S'"
 
-sloppy_ssh() {
+sloppySSH() {
     /usr/bin/ssh -oBatchMode=yes -o TCPKeepAlive=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=30 -o ConnectTimeout=30 -o ConnectionAttempts=30 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=error "$@";
 }
 
-sloppy_scp() {
+sloppySCP() {
     /usr/bin/scp -oBatchMode=yes -o TCPKeepAlive=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=30 -o ConnectTimeout=30 -o ConnectionAttempts=30 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=error "$@";
 }
 
 waitForDockerRegistryLocal() {
-    until
-        2>&1 docker inspect -f '{{.ID}}' registry;
-    do
-        echo .;
-        sleep 0.5;
+    until 2>&1 docker inspect -f '{{.ID}}' registry; do
+        echo .; sleep 0.5;
     done
 }
 
 waitForDockerUpgrade() {
     until [ -e "$DOCKER_UPGRADE_DONE_MARKER_PATH" ]; do
-        echo .,
-        sleep 0.5;
+        echo ., sleep 0.5;
     done;
 }
 
 waitForDockerRegistryRemote() {
-    until
-        2>&1 curl --fail -L https://"$REGISTRY_DOMAIN"/v2/
-    do
-        sleep 0.5;
+    until 2>&1 curl --fail -L https://"$REGISTRY_DOMAIN"/v2/; do
+        echo .; sleep 0.5;
     done;
 }
 
 waitForKubernetes() {
-    until
-        2>&1 kubectl -v1 --request-timeout=1s version;
-    do
-        sleep 0.5;
+    until 2>&1 kubectl -v1 --request-timeout=1s version; do
+        echo .; sleep 0.5;
     done
 }
 
 waitForWeave() {
-    (
-        until
-            numberReady=$(2>&1 kubectl get daemonset -n kube-system weave-net -o jsonpath='{.status.numberReady}') &&
-            numberDesired=$(2>&1 kubectl get daemonset -n kube-system weave-net -o jsonpath='{.status.desiredNumberScheduled}') &&
-            [ "$numberReady" = "$numberDesired" ];
-        do
-            echo .;
-            sleep 0.5;
-        done;
-    )
+    until
+        numberReady=$(2>&1 kubectl get daemonset -n kube-system weave-net -o jsonpath='{.status.numberReady}') &&
+        numberDesired=$(2>&1 kubectl get daemonset -n kube-system weave-net -o jsonpath='{.status.desiredNumberScheduled}') &&
+        [ "$numberReady" = "$numberDesired" ];
+    do
+        echo .; sleep 0.5;
+    done;
 }
 
 deployIngressController() {
-    (
-        curl -sSL https://gist.github.com/sgreben/2ba25294973c9e299d6770aea320f780/raw// |
-            sed "s/HOST_IP/$MASTER_IP/" |
-            2>&1 kubectl -v1 apply -f -;
-    )
+    curl -sSL https://gist.github.com/sgreben/2ba25294973c9e299d6770aea320f780/raw// |
+        sed "s/HOST_IP/$MASTER_IP/" |
+        2>&1 kubectl -v1 apply -f -;
 }
 
 deployDashboard() {
-    (
-        2>&1 kubectl -v1 apply -f https://gist.github.com/sgreben/bd04d51eb2f683091ba62d7389a564a8/raw//;
-    )
+    2>&1 kubectl -v1 apply -f https://gist.github.com/sgreben/bd04d51eb2f683091ba62d7389a564a8/raw//;
 }
 
 installTools() {
@@ -90,36 +75,28 @@ installTools() {
 }
 
 installKustomize() {
-    until
-        2>&1 curl --fail -kLo /usr/local/bin/kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v2.0.1/kustomize_2.0.1_linux_amd64;
-    do
-        sleep 0.5;
+    until 2>&1 curl --fail -kLo /usr/local/bin/kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v2.0.1/kustomize_2.0.1_linux_amd64; do
+        echo .; sleep 0.5;
     done;
     chmod +x /usr/local/bin/kustomize;
 }
 
 installDockerCompose() {
-    until
-        2>&1 curl --fail -kLo /usr/local/bin/docker-compose https://github.com/docker/compose/releases/download/1.24.0-rc1/docker-compose-"$(uname -s)"-"$(uname -m)";
-    do
-        sleep 0.5;
+    until 2>&1 curl --fail -kLo /usr/local/bin/docker-compose https://github.com/docker/compose/releases/download/1.24.0-rc1/docker-compose-"$(uname -s)"-"$(uname -m)"; do
+        echo .; sleep 0.5;
     done;
     chmod +x /usr/local/bin/docker-compose;
 }
 
 installStern() {
-    until
-        2>&1 curl --fail -Lo /usr/local/bin/stern https://github.com/wercker/stern/releases/download/1.10.0/stern_linux_amd64;
-    do
-        sleep 0.5;
+    until 2>&1 curl --fail -Lo /usr/local/bin/stern https://github.com/wercker/stern/releases/download/1.10.0/stern_linux_amd64; do
+        echo .; sleep 0.5;
     done;
     chmod +x /usr/local/bin/stern;
 }
 
 installStdinSpinner() {
-    until
-        2>/dev/null curl --fail -ksSL https://github.com/sgreben/stdin-spinner/releases/download/1.0.4/stdin-spinner_1.0.4_linux_x86_64.tar.gz | tar xz;
-    do
+    until 2>/dev/null curl --fail -ksSL https://github.com/sgreben/stdin-spinner/releases/download/1.0.4/stdin-spinner_1.0.4_linux_x86_64.tar.gz | tar xz; do
         sleep 0.5;
     done;
     chmod +x stdin-spinner
@@ -135,13 +112,15 @@ configureGit() {
 }
 
 configureSSH() {
-    >/dev/null 2>/dev/null chmod 400 ~/.ssh/k8s_workshop_breda;
-    cat >> ~/.bashrc <<EOF
+    (
+        chmod 400 ~/.ssh/k8s_workshop_breda;
+        cat >> ~/.bashrc <<EOF
         >/dev/null 2>/dev/null eval "\$(ssh-agent)";
         >/dev/null 2>/dev/null ssh-add ~/.ssh/k8s_workshop_breda;
         alias g=git;
         alias k=kubectl;
 EOF
+    ) 2>/dev/null >/dev/null;
     cat <<EOF
 $(simple_date)] SSH public key:
 
@@ -151,18 +130,21 @@ EOF
 }
 
 runDockerRegistry() {
-    (
-        2>&1 docker run --restart=always -d -p 443:5000 \
-            -v /root/.certs:/certs \
-            -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/$REGISTRY_DOMAIN.crt \
-            -e REGISTRY_HTTP_TLS_KEY=/certs/$REGISTRY_DOMAIN.key \
-            -v /opt/registry/data:/var/lib/registry \
-            --name registry registry:2;
-    )
+    2>&1 docker run --restart=always -d -p 443:5000 \
+        -v /root/.certs:/certs \
+        -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/$REGISTRY_DOMAIN.crt \
+        -e REGISTRY_HTTP_TLS_KEY=/certs/$REGISTRY_DOMAIN.key \
+        -v /opt/registry/data:/var/lib/registry \
+        --name registry registry:2;
 }
 
-hideCursor() { printf "\033[?25l"; }
-restoreCursor() { printf "\033[?25h"; }
+hideCursor() {
+    printf "\033[?25l";
+}
+
+restoreCursor() {
+    printf "\033[?25h";
+}
 
 main_master() {
     clear;
@@ -252,7 +234,7 @@ upgradeCluster() {
 
 aptGetUpdateOn() {
     HOST="$1";
-    2>&1 sloppy_ssh root@"$HOST" "
+    2>&1 sloppySSH root@"$HOST" "
         export DEBIAN_FRONTEND=noninteractive;
         apt-get -y update;
     ";
@@ -260,28 +242,28 @@ aptGetUpdateOn() {
 
 stopKubeletOn() {
     HOST="$1"
-    2>&1 sloppy_ssh root@"$HOST" "
+    2>&1 sloppySSH root@"$HOST" "
         service kubelet stop;
     ";
 }
 
 startKubeletOn() {
     HOST="$1"
-    2>&1 sloppy_ssh root@"$HOST" "
+    2>&1 sloppySSH root@"$HOST" "
         service kubelet start;
     ";
 }
 
 stopDockerOn() {
     HOST="$1"
-    2>&1 sloppy_ssh root@"$HOST" "
+    2>&1 sloppySSH root@"$HOST" "
         service docker stop;
     ";
 }
 
 startDockerOn() {
     HOST="$1"
-    2>&1 sloppy_ssh root@"$HOST" "
+    2>&1 sloppySSH root@"$HOST" "
         systemctl daemon-reload;
         service docker start;
     ";
@@ -290,7 +272,7 @@ startDockerOn() {
 upgradeDockerOn() {
     HOST="$1";
 
-    2>&1 sloppy_ssh root@"$HOST" "
+    2>&1 sloppySSH root@"$HOST" "
         mkdir -p /etc/systemd/system/docker.service.d;
         cat > /etc/systemd/system/docker.service.d/docker.conf;
     " <<EOF
@@ -298,7 +280,7 @@ upgradeDockerOn() {
 ExecStart=
 ExecStart=/usr/bin/dockerd
 EOF
-    2>&1 sloppy_ssh root@"$HOST" "
+    2>&1 sloppySSH root@"$HOST" "
         export DEBIAN_FRONTEND=noninteractive;
         apt-get install --no-install-recommends -y docker.io;
         touch $DOCKER_UPGRADE_DONE_MARKER_PATH;
@@ -310,22 +292,22 @@ copyKubeconfigTo() {
     until [ -f /root/.kube/config ]; do
         sleep 1;
     done;
-    2>&1 sloppy_ssh root@"$HOST" "
+    2>&1 sloppySSH root@"$HOST" "
         mkdir -p /root/.kube/;
     ";
-    sloppy_scp /root/.kube/config root@"$HOST":/root/.kube/
+    sloppySCP /root/.kube/config root@"$HOST":/root/.kube/
 }
 
 setUpRegistryEtcHostsOn() {
     HOST="$1";
-    2>&1 sloppy_ssh root@"$HOST" "
+    2>&1 sloppySSH root@"$HOST" "
         echo '${REGISTRY_IP}' '${REGISTRY_DOMAIN}' >> /etc/hosts
     "
 }
 
 setUpMasterEtcHostsOn() {
     HOST="$1";
-    2>&1 sloppy_ssh root@"$HOST" "
+    2>&1 sloppySSH root@"$HOST" "
         echo '${MASTER_IP}' master >> /etc/hosts
     "
 }
@@ -358,15 +340,15 @@ setUpCertsOn() {
     export REGISTRY_DOMAIN;
     CERTS_PATH="$1";
     HOST="$2";
-    2>&1 sloppy_ssh root@"$HOST" "
+    2>&1 sloppySSH root@"$HOST" "
         mkdir -p /root/.certs;
         mkdir -p /usr/local/share/ca-certificates/${REGISTRY_DOMAIN};
         mkdir -p /etc/docker/certs.d/${REGISTRY_DOMAIN};
     ";
-    sloppy_scp "$CERTS_PATH"/rootCA.crt root@"$HOST":/usr/local/share/ca-certificates/${REGISTRY_DOMAIN};
-    sloppy_scp "$CERTS_PATH"/rootCA.crt root@"$HOST":/etc/docker/certs.d/${REGISTRY_DOMAIN}/ca.crt;
-    sloppy_scp -r "$CERTS_PATH"/* root@"$HOST":/root/.certs/;
-    2>&1 sloppy_ssh root@"$HOST" "
+    sloppySCP "$CERTS_PATH"/rootCA.crt root@"$HOST":/usr/local/share/ca-certificates/${REGISTRY_DOMAIN};
+    sloppySCP "$CERTS_PATH"/rootCA.crt root@"$HOST":/etc/docker/certs.d/${REGISTRY_DOMAIN}/ca.crt;
+    sloppySCP -r "$CERTS_PATH"/* root@"$HOST":/root/.certs/;
+    2>&1 sloppySSH root@"$HOST" "
         update-ca-certificates;
     ";
 }
