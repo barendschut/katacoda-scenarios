@@ -281,6 +281,7 @@ aptGetUpdateOn() {
 
 kubernetesDrain() {
     NODE="$1";
+    kubectl wait --for condition=Ready node/"$NODE";
     kubectl drain "$NODE" --delete-local-data=true --ignore-daemonsets=true;
 }
 
