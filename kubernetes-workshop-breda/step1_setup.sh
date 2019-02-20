@@ -224,12 +224,8 @@ upgradeCluster() {
     setUpRegistryEtcHostsOn localhost;
     setUpMasterEtcHostsOn node01;
     copyKubeconfigTo node01;
-    # kubectl -v1 apply -f https://git.io/weave-kube;
-    # kubectl delete pods -n kube-system -lname=weave-net;
     waitForWeave;
     generateCertsIn "$CERTS_PATH";
-    #upgradeKubernetesTo v1.12.1;
-    #upgradeKubernetesTo v1.13.3;
     stopKubeletOn node01;
     stopKubeletOn master;
     (
@@ -251,78 +247,14 @@ upgradeCluster() {
     startKubeletOn node01;
     waitForKubernetes;
     waitForWeave;
-    kubernetesUnDrain master;
-    kubernetesUnDrain node01;
 }
 
-upgradeKubernetesTo() {
-    VERSION="$1"
-    upgradeKubeadm;
-    kubectl wait --for condition=Ready node/master;
-    kubeadm upgrade apply -f "$VERSION";
-    upgradeKubeletOn master;
-    upgradeKubeletConfigOn node01;
-    upgradeKubeletOn node01;
-    upgradeKubectlOn node01;
-    upgradeKubectlOn master;
-    waitForKubernetes;
-    waitForWeave;
-    kubernetesUnDrain node01;
-    kubernetesUnDrain master;
-}
 
 aptGetUpdateOn() {
     HOST="$1";
     2>&1 sloppy_ssh root@"$HOST" "
         export DEBIAN_FRONTEND=noninteractive;
         apt-get -y update;
-    ";
-}
-
-kubernetesDrain() {
-    NODE="$1";
-    kubectl wait --for condition=Ready node/"$NODE";
-    kubectl drain "$NODE" --delete-local-data=true --ignore-daemonsets=true;
-}
-
-kubernetesUnDrain() {
-    NODE="$1";
-    kubectl wait --for condition=Ready node/"$NODE";
-    kubectl uncordon "$NODE"
-}
-
-
-upgradeKubeadm() {
-    export DEBIAN_FRONTEND=noninteractive;
-    apt-mark unhold kubeadm && \
-    apt-get install --no-install-recommends -y kubeadm && \
-    apt-mark hold kubeadm
-}
-
-upgradeKubeletOn() {
-    HOST="$1";
-
-    2>&1 sloppy_ssh root@"$HOST" "
-        export DEBIAN_FRONTEND=noninteractive;
-        apt-get install --no-install-recommends -y kubelet kubeadm;
-    ";
-}
-
-upgradeKubectlOn() {
-    HOST="$1";
-
-    2>&1 sloppy_ssh root@"$HOST" "
-        export DEBIAN_FRONTEND=noninteractive;
-        apt-get install --no-install-recommends -y kubectl;
-    ";
-}
-
-upgradeKubeletConfigOn() {
-    HOST="$1";
-
-    2>&1 sloppy_ssh root@"$HOST" "
-        kubeadm upgrade node config --kubelet-version=\"$(kubelet --version | cut -d ' ' -f 2)\";
-        systemctl restart kubelet;
     ";
 }
 
@@ -347,7 +279,6 @@ stopDockerOn() {
     ";
 }
 
-
 startDockerOn() {
     HOST="$1"
     2>&1 sloppy_ssh root@"$HOST" "
@@ -361,8 +292,6 @@ upgradeDockerOn() {
 
     2>&1 sloppy_ssh root@"$HOST" "
         mkdir -p /etc/systemd/system/docker.service.d;
-    ";
-    2>&1 sloppy_ssh root@"$HOST" "
         cat > /etc/systemd/system/docker.service.d/docker.conf;
     " <<EOF
 [Service]
