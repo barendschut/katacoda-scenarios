@@ -26,6 +26,12 @@ waitForDockerRegistryLocal() {
     done
 }
 
+waitForDockerDaemon() {
+    until 2>&1 docker version; do
+        echo ., sleep 0.5;
+    done;
+}
+
 waitForDockerUpgrade() {
     until [ -e "$DOCKER_UPGRADE_DONE_MARKER_PATH" ]; do
         echo ., sleep 0.5;
@@ -230,6 +236,7 @@ upgradeCluster() {
         setUpCertsOn "$CERTS_PATH" localhost;
         upgradeDockerOn localhost;
         startDockerOn localhost;
+        waitForDockerDaemon;
     ) &
     wait;
     startKubeletOn master;
