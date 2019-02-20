@@ -1,5 +1,15 @@
 Please wait for the initial tasks to finish (i.e. the shell prompt to be ready) before doing anything :)
 
+## Web UI Links
+
+- [Kubernetes Dashboard](https://[[HOST_SUBDOMAIN]]-30080-[[KATACODA_HOST]].environments.katacoda.com/)
+
+- [App (Web)](https://[[HOST_SUBDOMAIN]]-80-[[KATACODA_HOST]].environments.katacoda.com/)
+
+- [App (API)](https://[[HOST_SUBDOMAIN]]-80-[[KATACODA_HOST]].environments.katacoda.com/api)
+
+- [App (DB)](https://[[HOST_SUBDOMAIN]]-80-[[KATACODA_HOST]].environments.katacoda.com/db)
+
 ## Docker registry
 
 The Docker registry `registry.workshop.breda.local`{{copy}} is reachable from both nodes (and only from them). Example usage:
@@ -18,13 +28,3 @@ The Docker registry `registry.workshop.breda.local`{{copy}} is reachable from bo
   ```{{execute}}
 
 - **View it** [in the browser](https://[[HOST_SUBDOMAIN]]-30099-[[KATACODA_HOST]].environments.katacoda.com/)
-
-## Web UI Links
-
-- [Kubernetes Dashboard](https://[[HOST_SUBDOMAIN]]-30080-[[KATACODA_HOST]].environments.katacoda.com/)
-
-- [App (Web)](https://[[HOST_SUBDOMAIN]]-80-[[KATACODA_HOST]].environments.katacoda.com/)
-
-- [App (API)](https://[[HOST_SUBDOMAIN]]-80-[[KATACODA_HOST]].environments.katacoda.com/api)
-
-- [App (DB)](https://[[HOST_SUBDOMAIN]]-80-[[KATACODA_HOST]].environments.katacoda.com/db)
