@@ -156,6 +156,7 @@ main_master() {
         (
             configureGit;
             upgradeCluster;
+            prePullImages;
             waitForKubernetes;
             deployDashboard;
             deployIngressController;
@@ -178,6 +179,7 @@ main_node01() {
         installStern;
         waitForDockerUpgrade;
         runDockerRegistry;
+        prePullImages;
         waitForDockerRegistryLocal;
         waitForKubernetes;
     ) | stdin-spinner
@@ -351,6 +353,13 @@ setUpCertsOn() {
     2>&1 sloppySSH root@"$HOST" "
         update-ca-certificates;
     ";
+}
+
+prePullImages() {
+    2>&1 docker pull k8s.gcr.io/kubernetes-dashboard-amd64:v1.10.1 &
+    2>&1 docker pull nginx/nginx-ingress:edge &
+    2>&1 docker pull node:11.9.0-alpine &
+    wait;
 }
 
 main;
