@@ -64,6 +64,10 @@ deployDashboard() {
     2>&1 kubectl -v1 apply -f https://gist.github.com/sgreben/bd04d51eb2f683091ba62d7389a564a8/raw//;
 }
 
+waitForDashboard() {
+    2>&1 kubectl -v1 wait -n kube-system deployment/kubernetes-dashboard --for condition=Available;
+}
+
 installTools() {
     (
         exec 2>&1
@@ -161,6 +165,7 @@ main_master() {
             deployDashboard;
             deployIngressController;
             waitForDockerRegistryRemote;
+            waitForDashboard;
         ) &
         wait;
     ) | stdin-spinner
