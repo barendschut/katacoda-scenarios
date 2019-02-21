@@ -12,7 +12,6 @@ git_wait_for_change() {
         if [ "$(2>&1 git rev-parse HEAD)" != "$(2>&1 git rev-parse origin/"$BRANCH")" ]; then
             break;
         fi;
-        echo .;
         sleep 1;
     done | stdin-spinner;
 }

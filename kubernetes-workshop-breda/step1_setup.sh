@@ -66,6 +66,11 @@ deployIngressController() {
         2>&1 kubectl -v1 apply -f -;
 }
 
+deployPVController() {
+    curl -sSL https://gist.github.com/sgreben/31153ca2d368bfe774c104a03ecb03d2/raw |
+    2>&1 kubectl -v1 apply -f -;
+}
+
 deployDashboard() {
     2>&1 kubectl -v1 apply -f https://gist.github.com/sgreben/bd04d51eb2f683091ba62d7389a564a8/raw//;
 }
@@ -171,6 +176,7 @@ main_master() {
             waitForKubernetes;
             deployDashboard;
             deployIngressController;
+            deployPVController;
             waitForDockerRegistryRemote;
             waitForDashboard;
         ) &
