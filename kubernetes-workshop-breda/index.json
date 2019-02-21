@@ -26,8 +26,8 @@
           "target": "~/.ssh/"
         },
         {
-          "file": "tiny-cd",
-          "target": "/usr/bin/",
+          "file": "k8s-workshop-helpers.sh.inc",
+          "target": "/opt/",
           "chmod": "+x"
         }
       ]

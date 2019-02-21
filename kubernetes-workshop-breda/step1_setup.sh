@@ -129,6 +129,7 @@ configureSSH() {
         >/dev/null 2>/dev/null ssh-add ~/.ssh/k8s_workshop_breda;
         alias g=git;
         alias k=kubectl;
+        . /opt/k8s-workshop-helpers.sh.inc;
 EOF
     ) 2>/dev/null >/dev/null;
     cat <<EOF
@@ -197,7 +198,7 @@ main_node01() {
     ) | stdin-spinner
     echo "[$(simple_date)] done"
     restoreCursor;
-    echo '# log output from your apps will appear below'
+    echo '# log output from your apps in the default namespace will appear below.'
     echo 'node01 $ stern ""'
     stern ""
 }
