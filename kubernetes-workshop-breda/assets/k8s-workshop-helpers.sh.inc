@@ -22,6 +22,6 @@ git_current_commit_id() {
 }
 
 kustomize_set_image_tag_to() {
-    TAG="%1"
-    kustomize edit set image '*'=:"$1";
+    TAG="$1"
+    kustomize edit set image '*'=:"$TAG";
 }
