@@ -8,7 +8,7 @@ Please wait for the initial tasks to finish (i.e. the shell prompt to be ready) 
 
 - [App (API)](https://[[HOST_SUBDOMAIN]]-80-[[KATACODA_HOST]].environments.katacoda.com/api)
 
-- [App (DB)](https://[[HOST_SUBDOMAIN]]-80-[[KATACODA_HOST]].environments.katacoda.com/db)
+- [App (DB)](https://[[HOST_SUBDOMAIN]]-80-[[KATACODA_HOST]].environments.katacoda.com/redis)
 
 ## Docker registry
 
